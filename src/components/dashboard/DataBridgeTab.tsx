@@ -1,325 +1,663 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Database, Brain, Activity, Zap, ExternalLink } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { 
+  RefreshCw, 
+  FileText, 
+  Play,
+  CheckCircle,
+  Clock,
+  AlertCircle,
+  Activity,
+  Zap,
+  Database,
+  Link,
+  ExternalLink,
+  ArrowRight,
+  ArrowLeft,
+  Circle,
+  Check,
+  X
+} from "lucide-react";
+import { useState, useEffect } from "react";
+import jsPDF from 'jspdf';
 
 const DataBridgeTab = () => {
-  const apiIndicators = [
-    { name: "Salesforce", status: "ACTIVE" },
-    { name: "HubSpot", status: "ACTIVE" },
-    { name: "Oracle", status: "ACTIVE" },
-    { name: "SAP", status: "ACTIVE" },
-  ];
+  const [systemStatus, setSystemStatus] = useState([
+    {
+      system: "System A",
+      status: "Active",
+      interval: "5 min",
+      statusType: "active"
+    },
+    {
+      system: "System B",
+      status: "Linked",
+      interval: "10 min",
+      statusType: "linked"
+    },
+    {
+      system: "System C",
+      status: "Pending",
+      interval: "11:45",
+      statusType: "pending"
+    },
+    {
+      system: "System E",
+      status: "Offline",
+      interval: "10:27",
+      statusType: "offline"
+    },
+    {
+      system: "System E",
+      status: "Offline",
+      interval: "-",
+      statusType: "offline"
+    }
+  ]);
 
-  const hashStream = [
-    "1B.44.4/ 314552d452A82b33",
-    "1B.44.6/ 830d4433DA8/0b64",
-    "1B.44.4/ a055d862c446238",
-    "1B.44.6/ 1746d2150D407AA4",
-    "1B.44.4/ 1c0f86b6841c7T0",
-    "1B.44.4/ F29B326440P0b02",
-    "1B.44.4/ 8eff33447d0506c",
-  ];
+  const [bridgeProgress, setBridgeProgress] = useState(94);
+  const [latency, setLatency] = useState(62);
+  const [packetLoss, setPacketLoss] = useState(0);
+  const [aiForecast, setAiForecast] = useState({
+    nextUpdate: 3,
+    confidence: 97
+  });
+  const [isLive, setIsLive] = useState(true);
+  const [lastUpdate, setLastUpdate] = useState(new Date());
+  const [showSyncDialog, setShowSyncDialog] = useState(false);
+  const [showLedgerDialog, setShowLedgerDialog] = useState(false);
+  const [syncProgress, setSyncProgress] = useState(0);
+  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'completed'>('idle');
+  const [ledgerData, setLedgerData] = useState([
+    { block: "#942", hash: "0x8fa3...78bd", timestamp: "2025-01-15 14:32:11", status: "Verified", txCount: 24 },
+    { block: "#941", hash: "0x7ea2...56ac", timestamp: "2025-01-15 14:31:45", status: "Verified", txCount: 18 },
+    { block: "#940", hash: "0x6db1...45bd", timestamp: "2025-01-15 14:31:22", status: "Verified", txCount: 31 },
+    { block: "#939", hash: "0x5ca0...34ac", timestamp: "2025-01-15 14:30:58", status: "Verified", txCount: 27 },
+    { block: "#938", hash: "0x4b9f...23bd", timestamp: "2025-01-15 14:30:35", status: "Verified", txCount: 22 }
+  ]);
+
+  // Real-time updates
+  useEffect(() => {
+    const updateInterval = setInterval(() => {
+      if (!isLive) return;
+
+      // Update bridge progress with small variations
+      setBridgeProgress(prev => {
+        const variation = (Math.random() - 0.5) * 4; // ±2%
+        return Math.max(90, Math.min(100, Math.round(prev + variation)));
+      });
+
+      // Update latency with realistic variations
+      setLatency(prev => {
+        const variation = (Math.random() - 0.5) * 10; // ±5ms
+        return Math.max(50, Math.min(80, Math.round(prev + variation)));
+      });
+
+      // Update packet loss (usually 0%)
+      setPacketLoss(prev => {
+        const variation = Math.random() < 0.1 ? Math.random() * 0.5 : 0; // 10% chance of small packet loss
+        return Math.round(prev + variation);
+      });
+
+      // Update AI forecast
+      setAiForecast(prev => {
+        return {
+          nextUpdate: Math.max(1, Math.min(5, prev.nextUpdate - 1)),
+          confidence: Math.max(95, Math.min(99, Math.round(prev.confidence + (Math.random() - 0.5) * 2)))
+        };
+      });
+
+      // Update system status with realistic changes
+      setSystemStatus(prevStatus => {
+        return prevStatus.map(system => {
+          // Small chance to change status
+          if (Math.random() < 0.05 && system.statusType !== "offline") {
+            const statuses = ["Active", "Linked", "Pending"];
+            const statusTypes = ["active", "linked", "pending"];
+            const randomIndex = Math.floor(Math.random() * statuses.length);
+            
+            return {
+              ...system,
+              status: statuses[randomIndex],
+              statusType: statusTypes[randomIndex]
+            };
+          }
+          return system;
+        });
+      });
+
+      setLastUpdate(new Date());
+    }, 2000);
+
+    return () => clearInterval(updateInterval);
+  }, [isLive]);
+
+  const getStatusColor = (statusType: string) => {
+    switch (statusType) {
+      case "active": return "text-teal-400";
+      case "linked": return "text-blue-400";
+      case "pending": return "text-yellow-400";
+      case "offline": return "text-red-400";
+      default: return "text-gray-400";
+    }
+  };
+
+  const getStatusIcon = (statusType: string) => {
+    switch (statusType) {
+      case "active": return <div className="w-3 h-3 bg-teal-400 rounded-full"></div>;
+      case "linked": return <div className="w-3 h-3 bg-blue-400 rounded-full"></div>;
+      case "pending": return <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>;
+      case "offline": return <div className="w-3 h-3 bg-red-400 rounded-full"></div>;
+      default: return <div className="w-3 h-3 bg-gray-400 rounded-full"></div>;
+    }
+  };
+
+  const handleForceSync = () => {
+    setShowSyncDialog(true);
+    setSyncStatus('syncing');
+    setSyncProgress(0);
+    
+    // Simulate sync progress
+    const progressInterval = setInterval(() => {
+      setSyncProgress(prev => {
+        if (prev >= 100) {
+          clearInterval(progressInterval);
+          setSyncStatus('completed');
+          return 100;
+        }
+        return prev + 10;
+      });
+    }, 300);
+  };
+
+  const handleOpenLedger = () => {
+    setShowLedgerDialog(true);
+  };
+
+  const handleOpenLedgerEmpty = () => {
+    setShowLedgerDialog(true);
+  };
+
+  const handleEmptyAction = () => {
+    alert("This button is reserved for future functionality.");
+  };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500">
+    <div className="space-y-6 bg-gray-900 min-h-screen p-6">
       {/* Header */}
-      <Card className="border-2 border-teal/50 bg-gradient-to-br from-card to-navy shadow-lg shadow-teal/20">
-        <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="text-2xl flex items-center gap-2">
-              <Database className="h-6 w-6 text-teal" />
-              NeoCard™ Sponsor Dashboard - Data Bridge
-            </CardTitle>
-          </div>
-        </CardHeader>
-      </Card>
-
-      {/* AI Sentinal */}
-      <Card className="border-2 border-primary/50 bg-card/80">
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Brain className="h-5 w-5 text-primary" />
-            AI SENTINAL
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* AI Visualization */}
-            <div className="flex items-center justify-center p-8">
-              <div className="relative">
-                <div className="w-48 h-48 rounded-full border-4 border-teal/30 flex items-center justify-center">
-                  <Brain className="h-24 w-24 text-teal drop-shadow-[0_0_20px_hsl(var(--teal))]" />
-                </div>
-                <div className="absolute -top-2 -right-2 w-16 h-16 rounded-full bg-primary/20 border-2 border-primary animate-pulse" />
-                <div className="absolute -bottom-2 -left-2 w-12 h-12 rounded-full bg-secondary/20 border-2 border-secondary animate-pulse" />
-              </div>
-            </div>
-
-            {/* AI Stats */}
-            <div className="space-y-4">
-              <div className="p-4 bg-muted rounded-lg">
-                <div className="text-sm text-muted-foreground mb-1">Status</div>
-                <div className="text-lg font-bold text-teal">Predicting latency spike in Kenya node (Confidence 52%)</div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-3">
-                <div className="text-center p-3 bg-muted rounded-lg">
-                  <div className="text-xs text-muted-foreground mb-1">NeoCard</div>
-                  <Badge className="bg-success/20 text-success border-success/30">✓</Badge>
-                </div>
-                <div className="text-center p-3 bg-muted rounded-lg">
-                  <div className="text-xs text-muted-foreground mb-1">Blockchain</div>
-                  <Badge className="bg-success/20 text-success border-success/30">✓</Badge>
-                </div>
-                <div className="text-center p-3 bg-muted rounded-lg">
-                  <div className="text-xs text-muted-foreground mb-1">Sponsor CRM</div>
-                  <Badge className="bg-success/20 text-success border-success/30">✓</Badge>
-                </div>
-              </div>
+        <div>
+          <h1 className="text-3xl font-bold text-white">Tab 9 - Sponsor Data Bridge</h1>
+          <div className="flex items-center gap-4 mt-2">
+            <div className="flex items-center gap-2">
+              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
+              <span className="text-sm text-gray-400">Bridge Online ✓ Live Sync with SYSTEM N & CRM Cloud</span>
             </div>
           </div>
-
-          {/* Live Hash Stream */}
-          <div className="mt-6 space-y-2">
-            <div className="flex items-center justify-between">
-              <h4 className="text-sm font-semibold text-foreground">LIVE HASH STREAM</h4>
-              <Badge className="bg-success/20 text-success border-success/30 text-xs">STREAMING</Badge>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center font-bold text-white text-xl">
+            K
+                </div>
+          <span className="text-xl font-bold text-white">CARDIVERSE</span>
+              </div>
             </div>
-            <div className="p-4 bg-navy rounded-lg font-mono text-xs space-y-1 max-h-32 overflow-y-auto">
-              {hashStream.map((hash, i) => (
-                <div key={i} className="text-teal">{hash}</div>
-              ))}
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column - System Status */}
+        <div className="space-y-6">
+          {/* System Status Table */}
+          <Card className="bg-gray-800 border-gray-700">
+            <CardHeader>
+              <CardTitle className="text-white">System Status</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="border-gray-700">
+                      <TableHead className="text-gray-300">System</TableHead>
+                      <TableHead className="text-gray-300">Status</TableHead>
+                      <TableHead className="text-gray-300">Interval</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {systemStatus.map((system, index) => (
+                      <TableRow key={index} className="border-gray-700 hover:bg-gray-700/50">
+                        <TableCell className="text-white font-medium">{system.system}</TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            {getStatusIcon(system.statusType)}
+                            <span className={`font-medium ${getStatusColor(system.statusType)}`}>
+                              {system.status}
+                            </span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-gray-400">{system.interval}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Legend */}
+          <Card className="bg-gray-800 border-gray-700">
+            <CardContent className="p-4">
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-teal-400 rounded-full"></div>
+                  <span className="text-sm text-white">Active</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                  <span className="text-sm text-white">Alert</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                  <span className="text-sm text-white">Alert</span>
+                </div>
+                <div className="space-y-1 mt-4">
+                  <span className="text-sm text-slate-300">Pending</span>
+                  <span className="text-sm text-slate-300">Blockchain Linked</span>
+                  <span className="text-sm text-slate-300">Export All → Audit</span>
             </div>
           </div>
         </CardContent>
       </Card>
+        </div>
 
-      {/* Integration Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* NeoCard */}
-        <Card className="border-2 border-primary/50 bg-card/80">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-semibold">NeoCard</CardTitle>
-              <Badge className="bg-success/20 text-success border-success/30 text-xs">SYNCED</Badge>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center justify-center p-6">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary to-primary/50 flex items-center justify-center">
-                <span className="text-2xl font-bold text-primary-foreground">NC</span>
+        {/* Center Column - Data Bridge Diagram */}
+        <div className="space-y-6">
+          {/* Data Bridge Progress */}
+          <Card className="bg-gray-800 border-gray-700">
+            <CardContent className="p-6">
+              <div className="flex flex-col items-center">
+                <div className="relative w-32 h-32 mb-4">
+                  <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                    {/* Background circle */}
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="40"
+                      stroke="#374151"
+                      strokeWidth="8"
+                      fill="none"
+                    />
+                    {/* Progress circle */}
+                    <circle
+                      cx="50"
+                      cy="50"
+                      r="40"
+                      stroke="#00ffff"
+                      strokeWidth="8"
+                      fill="none"
+                      strokeLinecap="round"
+                      strokeDasharray={`${2 * Math.PI * 40}`}
+                      strokeDashoffset={`${2 * Math.PI * 40 * (1 - bridgeProgress / 100)}`}
+                      className="transition-all duration-1000"
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-2xl font-bold text-white">{bridgeProgress}%</span>
               </div>
             </div>
-            <div className="space-y-1 text-sm">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Active Cards</span>
-                <span className="text-foreground font-semibold">10,284</span>
+                <span className="text-sm text-cyan-400 uppercase tracking-wide">Data Bridge</span>
               </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Last Sync</span>
-                <span className="text-success">2 min ago</span>
-              </div>
-            </div>
-            <Button size="sm" variant="outline" className="w-full border-primary">
-              <ExternalLink className="h-3 w-3 mr-2" />
-              View Details
-            </Button>
           </CardContent>
         </Card>
 
-        {/* Blockchain */}
-        <Card className="border-2 border-secondary/50 bg-card/80">
+          {/* System Nodes Diagram */}
+          <Card className="bg-gray-800 border-gray-700">
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-semibold">Blockchain</CardTitle>
-              <Badge className="bg-success/20 text-success border-success/30 text-xs">ACTIVE</Badge>
-            </div>
+              <CardTitle className="text-white">System Nodes</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center justify-center p-6">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-secondary to-secondary/50 flex items-center justify-center">
-                <Activity className="h-10 w-10 text-background" />
+            <CardContent>
+              <div className="h-80 relative">
+                <svg className="w-full h-full" viewBox="0 0 300 400">
+                  {/* Data Bridge Node - Center */}
+                  <circle cx="150" cy="200" r="30" fill="#00ffff" stroke="#00ffff" strokeWidth="2" />
+                  <text x="150" y="205" fontSize="12" fill="white" textAnchor="middle" fontWeight="bold">Data Bridge</text>
+                  
+                  {/* CRM Node - Top Left */}
+                  <circle cx="80" cy="100" r="25" fill="#00ffff" stroke="#00ffff" strokeWidth="2" />
+                  <text x="80" y="105" fontSize="10" fill="white" textAnchor="middle" fontWeight="bold">CRM</text>
+                  
+                  {/* SYSTEM N Node - Top Right */}
+                  <circle cx="220" cy="100" r="25" fill="#00ffff" stroke="#00ffff" strokeWidth="2" />
+                  <text x="220" y="105" fontSize="10" fill="white" textAnchor="middle" fontWeight="bold">SYSTEM N</text>
+                  
+                  {/* DASHBOARD Node - Bottom */}
+                  <circle cx="150" cy="320" r="25" fill="#00ffff" stroke="#00ffff" strokeWidth="2" />
+                  <text x="150" y="325" fontSize="10" fill="white" textAnchor="middle" fontWeight="bold">DASHBOARD</text>
+                  
+                  {/* Connections */}
+                  <line x1="95" y1="120" x2="135" y2="180" stroke="#00ffff" strokeWidth="3" />
+                  <line x1="205" y1="120" x2="165" y2="180" stroke="#00ffff" strokeWidth="3" />
+                  <line x1="150" y1="230" x2="150" y2="295" stroke="#ef4444" strokeWidth="3" />
+                  <line x1="95" y1="125" x2="205" y2="125" stroke="#00ffff" strokeWidth="3" />
+                </svg>
               </div>
-            </div>
-            <div className="space-y-1 text-sm">
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Verified Txns</span>
-                <span className="text-foreground font-semibold">10,002</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-muted-foreground">Chain Status</span>
-                <span className="text-success">Synced</span>
-              </div>
-            </div>
-            <Button size="sm" variant="outline" className="w-full border-secondary">
-              <ExternalLink className="h-3 w-3 mr-2" />
-              View Chain
-            </Button>
           </CardContent>
         </Card>
 
-        {/* Sponsor CRM */}
-        <Card className="border-2 border-teal/50 bg-card/80">
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-semibold">Sponsor CRM</CardTitle>
-              <Badge className="bg-success/20 text-success border-success/30 text-xs">CONNECTED</Badge>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center justify-center p-6">
-              <div className="w-20 h-20 rounded-full bg-gradient-to-br from-teal to-teal/50 flex items-center justify-center">
-                <Database className="h-10 w-10 text-background" />
-              </div>
-            </div>
-            <div className="space-y-1 text-sm">
+          {/* Performance Metrics */}
+          <Card className="bg-gray-800 border-gray-700">
+            <CardContent className="p-4">
+              <div className="space-y-2">
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Sponsors</span>
-                <span className="text-foreground font-semibold">28</span>
+                  <span className="text-sm text-slate-300">Latency</span>
+                  <span className="text-sm text-white font-medium">{latency} ms</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-muted-foreground">Data Sync</span>
-                <span className="text-success">Real-time</span>
+                  <span className="text-sm text-slate-300">Packet Loss</span>
+                  <span className="text-sm text-white font-medium">{packetLoss}%</span>
+                </div>
               </div>
-            </div>
-            <Button size="sm" variant="outline" className="w-full border-teal">
-              <ExternalLink className="h-3 w-3 mr-2" />
-              Manage
-            </Button>
           </CardContent>
         </Card>
       </div>
 
-      {/* API Indicators & AI Insights */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* API Indicators */}
-        <Card className="border-border bg-card/80">
+        {/* Right Column - Accuracy & Actions */}
+        <div className="space-y-6">
+          {/* Accuracy Box */}
+          <Card className="bg-gray-800 border-gray-700">
           <CardHeader>
-            <CardTitle className="text-lg">API Indicators</CardTitle>
+              <CardTitle className="text-white">Accuracy & Actions</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
-            {apiIndicators.map((api, i) => (
-              <div key={i} className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                <span className="text-sm font-semibold text-foreground">{api.name}</span>
-                <Badge className="bg-success/20 text-success border-success/30">{api.status}</Badge>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="text-sm text-gray-300">0x8fa3...78bd</div>
+                <div className="text-sm text-gray-300">Validated on Ledger #942</div>
+                <div className="text-sm text-green-400">Checksum OK</div>
               </div>
-            ))}
           </CardContent>
         </Card>
 
-        {/* AI Intelligence */}
-        <Card className="border-2 border-primary/30 bg-card/80">
+          {/* AI Forecast Box */}
+          <Card className="bg-gray-800 border-gray-700">
           <CardHeader>
-            <CardTitle className="text-lg flex items-center gap-2">
-              <Zap className="h-5 w-5 text-primary" />
-              AI Intelligence
-            </CardTitle>
+              <CardTitle className="text-white">AI Forecast</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="p-4 bg-primary/10 border border-primary/30 rounded-lg">
-              <div className="text-sm font-semibold text-primary mb-1">Data Optimization</div>
-              <div className="text-xs text-muted-foreground">
-                Routing Safaricom scan data via Japan node – latency reduced by 18%
-              </div>
-            </div>
-
-            <div className="p-4 bg-teal/10 border border-teal/30 rounded-lg">
-              <div className="text-sm font-semibold text-teal mb-1">Smart Contract Advisor</div>
-              <div className="text-xs text-muted-foreground">
-                3 contracts can be merged to reduce gas costs by 24%
-              </div>
-            </div>
-
-            <div className="p-4 bg-secondary/10 border border-secondary/30 rounded-lg">
-              <div className="text-sm font-semibold text-secondary mb-1">Predictive ROI</div>
-              <div className="text-xs text-muted-foreground">
-                Projected RO² next 24h: +6.3% (based on traffic and sync velocity)
-              </div>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="text-sm text-gray-300">Next Update in {aiForecast.nextUpdate} min</div>
+                <div className="text-sm text-green-400">Confidence {aiForecast.confidence}%</div>
             </div>
           </CardContent>
         </Card>
+
+          {/* Action Buttons */}
+          <Card className="bg-gray-800 border-gray-700">
+            <CardContent className="p-4">
+              <div className="grid grid-cols-3 gap-3">
+                <Button
+                  onClick={handleForceSync}
+                  className="aspect-square bg-cyan-600 hover:bg-cyan-700 text-white"
+                >
+                  <RefreshCw className="h-4 w-4" />
+                </Button>
+                <Button
+                  onClick={handleOpenLedgerEmpty}
+                  className="aspect-square bg-green-600 hover:bg-green-700 text-white"
+                >
+                  <FileText className="h-4 w-4" />
+                </Button>
+                <Button
+                  onClick={handleEmptyAction}
+                  className="aspect-square bg-gray-600 hover:bg-gray-700 text-white"
+                >
+                  <Circle className="h-4 w-4" />
+                </Button>
+              </div>
+              <div className="mt-3 text-center">
+                <div className="text-xs text-gray-400">Force Sync</div>
+                <div className="text-xs text-gray-400">Open Ledger</div>
+                <div className="text-xs text-gray-400"></div>
+            </div>
+          </CardContent>
+        </Card>
+
+          {/* Alert Message */}
+          <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-3">
+            <div className="text-red-400 text-sm">SYSTEM E Offline - Auto retry in 2 min</div>
+          </div>
+        </div>
       </div>
 
-      {/* Data Throughput & Chain Governance */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="border-border bg-card/80 lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="text-lg">AI Chain Governance</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+      {/* Force Sync Dialog */}
+      <Dialog open={showSyncDialog} onOpenChange={setShowSyncDialog}>
+        <DialogContent className="bg-gray-800 border-gray-700 text-white max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-white flex items-center gap-2">
+              <RefreshCw className={`h-6 w-6 text-cyan-400 ${syncStatus === 'syncing' ? 'animate-spin' : ''}`} />
+              Force Data Synchronization
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-6 mt-4">
+            {/* Sync Progress */}
             <div className="space-y-2">
-              <div className="text-sm text-muted-foreground">Smart Contract Activity</div>
-              <div className="text-2xl font-bold text-foreground">5 Executed • 14 Pending</div>
-            </div>
-
-            <div className="space-y-2">
-              <div className="text-sm text-muted-foreground">Load Balancing</div>
-              <div className="text-sm text-foreground">
-                Shift 10% load from UBA node to Kenya node to maintain sync equilibrium
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-gray-300">Sync Progress</span>
+                <span className="text-sm font-bold text-cyan-400">{syncProgress}%</span>
+              </div>
+              <div className="w-full bg-gray-700 rounded-full h-3">
+                <div 
+                  className="bg-gradient-to-r from-cyan-500 to-blue-500 h-3 rounded-full transition-all duration-300"
+                  style={{ width: `${syncProgress}%` }}
+                ></div>
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-3 pt-4">
-              <div className="text-center p-3 bg-muted rounded-lg">
-                <div className="text-xs text-muted-foreground mb-1">JAPAN</div>
-                <div className="w-12 h-12 mx-auto rounded-full border-4 border-teal/30 flex items-center justify-center">
-                  <Activity className="h-5 w-5 text-teal" />
+            {/* Sync Status */}
+            <Card className="bg-gray-900 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-lg text-white">System Status</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {systemStatus.map((system, index) => (
+                    <div key={index} className="flex items-center justify-between p-2 bg-gray-800 rounded">
+                      <div className="flex items-center gap-2">
+                        <div className={`w-2 h-2 rounded-full ${
+                          syncProgress > (index + 1) * 20 ? 'bg-green-400' : 'bg-yellow-400 animate-pulse'
+                        }`}></div>
+                        <span className="text-sm text-white">{system.system}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {syncProgress > (index + 1) * 20 ? (
+                          <>
+                            <Check className="h-4 w-4 text-green-400" />
+                            <span className="text-xs text-green-400">Synced</span>
+                          </>
+                        ) : syncProgress >= index * 20 ? (
+                          <>
+                            <RefreshCw className="h-4 w-4 text-cyan-400 animate-spin" />
+                            <span className="text-xs text-cyan-400">Syncing...</span>
+                          </>
+                        ) : (
+                          <span className="text-xs text-gray-400">Waiting...</span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
-              <div className="text-center p-3 bg-muted rounded-lg">
-                <div className="text-xs text-muted-foreground mb-1">EUROPE</div>
-                <div className="w-12 h-12 mx-auto rounded-full border-4 border-primary/30 flex items-center justify-center">
-                  <Activity className="h-5 w-5 text-primary" />
-                </div>
-              </div>
-              <div className="text-center p-3 bg-muted rounded-lg">
-                <div className="text-xs text-muted-foreground mb-1">USA</div>
-                <div className="w-12 h-12 mx-auto rounded-full border-4 border-secondary/30 flex items-center justify-center">
-                  <Activity className="h-5 w-5 text-secondary" />
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+              </CardContent>
+            </Card>
 
-        <Card className="border-2 border-teal/30 bg-card/80">
-          <CardHeader>
-            <CardTitle className="text-lg">Data Throughput Meter</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center justify-center p-6">
-              <div className="relative">
-                <div className="w-32 h-32 rounded-full border-4 border-teal/30 flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-teal">780</div>
-                    <div className="text-xs text-muted-foreground">MB/s</div>
+            {/* Sync Details */}
+            {syncStatus === 'completed' && (
+              <Card className="bg-green-900/20 border-green-500/30">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-3">
+                    <CheckCircle className="h-6 w-6 text-green-400" />
+                    <div>
+                      <div className="text-sm font-bold text-green-400">Synchronization Complete!</div>
+                      <div className="text-xs text-gray-300 mt-1">All systems are now in sync with the data bridge.</div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Action Buttons */}
+            <div className="flex justify-end gap-3">
+              {syncStatus === 'completed' ? (
+                <Button
+                  onClick={() => {
+                    setShowSyncDialog(false);
+                    setSyncStatus('idle');
+                    setSyncProgress(0);
+                  }}
+                  className="bg-cyan-600 hover:bg-cyan-700 text-white"
+                >
+                  Close
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => {
+                    setShowSyncDialog(false);
+                    setSyncStatus('idle');
+                    setSyncProgress(0);
+                  }}
+                  variant="outline"
+                  className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                >
+                  Cancel
+                </Button>
+              )}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Ledger Viewer Dialog */}
+      <Dialog open={showLedgerDialog} onOpenChange={setShowLedgerDialog}>
+        <DialogContent className="bg-gray-800 border-gray-700 text-white max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold text-white flex items-center gap-2">
+              <FileText className="h-6 w-6 text-green-400" />
+              Blockchain Ledger Viewer
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-6 mt-4">
+            {/* Ledger Summary */}
+            <div className="grid grid-cols-3 gap-4">
+              <Card className="bg-gray-900 border-gray-700">
+                <CardContent className="p-4">
+                  <div className="text-xs text-gray-400">Total Blocks</div>
+                  <div className="text-2xl font-bold text-cyan-400">942</div>
+                </CardContent>
+              </Card>
+              <Card className="bg-gray-900 border-gray-700">
+                <CardContent className="p-4">
+                  <div className="text-xs text-gray-400">Validated</div>
+                  <div className="text-2xl font-bold text-green-400">100%</div>
+                </CardContent>
+              </Card>
+              <Card className="bg-gray-900 border-gray-700">
+                <CardContent className="p-4">
+                  <div className="text-xs text-gray-400">Latest Block</div>
+                  <div className="text-2xl font-bold text-white">#942</div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Ledger Table */}
+            <Card className="bg-gray-900 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-lg text-white">Recent Blockchain Entries</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="border-gray-700">
+                        <TableHead className="text-gray-300">Block</TableHead>
+                        <TableHead className="text-gray-300">Hash</TableHead>
+                        <TableHead className="text-gray-300">Timestamp</TableHead>
+                        <TableHead className="text-gray-300">Status</TableHead>
+                        <TableHead className="text-gray-300">Transactions</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {ledgerData.map((entry, index) => (
+                        <TableRow key={index} className="border-gray-700 hover:bg-gray-800">
+                          <TableCell className="text-cyan-400 font-mono">{entry.block}</TableCell>
+                          <TableCell className="text-gray-300 font-mono text-sm">{entry.hash}</TableCell>
+                          <TableCell className="text-gray-400 text-sm">{entry.timestamp}</TableCell>
+                          <TableCell>
+                            <div className="flex items-center gap-2">
+                              <CheckCircle className="h-4 w-4 text-green-400" />
+                              <span className="text-green-400 text-sm">{entry.status}</span>
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-white">{entry.txCount}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Ledger Details */}
+            <Card className="bg-gray-900 border-gray-700">
+              <CardHeader>
+                <CardTitle className="text-lg text-white">Current Ledger: #942</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <div className="text-xs text-gray-400">Block Hash</div>
+                    <div className="text-sm text-cyan-400 font-mono">0x8fa3...78bd</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-400">Previous Hash</div>
+                    <div className="text-sm text-gray-300 font-mono">0x7ea2...56ac</div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-400">Checksum</div>
+                    <div className="text-sm text-green-400 flex items-center gap-1">
+                      <Check className="h-3 w-3" />
+                      OK
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-xs text-gray-400">Validation</div>
+                    <div className="text-sm text-green-400">Verified on Chain</div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div className="space-y-2 mt-4">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Peak</span>
-                <span className="text-foreground">842 MB/s</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Average</span>
-                <span className="text-foreground">687 MB/s</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+              </CardContent>
+            </Card>
 
-      {/* Footer Status */}
-      <Card className="border-primary/30 bg-card/50">
-        <CardContent className="py-4">
-          <div className="text-sm text-muted-foreground text-center">
-            Last Sync: 20Oct 2025 • Data Fully Synced • AI Sentinel Active • NeoChain™ Verified
+            {/* Action Buttons */}
+            <div className="flex justify-end gap-3">
+              <Button
+                onClick={() => setShowLedgerDialog(false)}
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                Close
+              </Button>
+              <Button
+                onClick={() => {
+                  alert("Exporting ledger data... This will download a complete ledger report in PDF format.");
+                }}
+                variant="outline"
+                className="border-gray-600 text-gray-300 hover:bg-gray-700"
+              >
+                <FileText className="h-4 w-4 mr-2" />
+                Export PDF
+              </Button>
+            </div>
           </div>
-        </CardContent>
-      </Card>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
