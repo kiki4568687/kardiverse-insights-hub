@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global responsive fixes to prevent horizontal scrolling */
+* {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+}
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */
@@ -9,24 +20,24 @@ All colors MUST be HSL.
 @layer base {
   :root {
     --background: 222 47% 11%;
-    --foreground: 45 100% 70%;
+    --foreground: 195 100% 75%;
 
     --card: 220 40% 8%;
-    --card-foreground: 45 100% 95%;
+    --card-foreground: 195 100% 90%;
 
     --popover: 220 45% 6%;
-    --popover-foreground: 45 100% 95%;
+    --popover-foreground: 195 100% 90%;
 
-    --primary: 45 93% 58%;
+    --primary: 195 100% 50%;
     --primary-foreground: 222 47% 11%;
 
-    --secondary: 180 100% 40%;
+    --secondary: 200 100% 50%;
     --secondary-foreground: 222 47% 11%;
 
     --muted: 220 20% 25%;
-    --muted-foreground: 45 20% 70%;
+    --muted-foreground: 195 30% 70%;
 
-    --accent: 45 100% 50%;
+    --accent: 195 100% 60%;
     --accent-foreground: 222 47% 11%;
 
     --destructive: 0 72% 51%;
@@ -35,9 +46,9 @@ All colors MUST be HSL.
     --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
 
-    --border: 45 40% 30%;
+    --border: 195 40% 35%;
     --input: 220 30% 15%;
-    --ring: 45 93% 58%;
+    --ring: 195 100% 50%;
 
     --radius: 0.5rem;
 
@@ -47,6 +58,12 @@ All colors MUST be HSL.
     --teal-glow: 180 100% 50%;
     --navy: 220 40% 8%;
     --navy-dark: 220 50% 4%;
+    
+    /* New neon glow colors */
+    --neon-blue: 195 100% 50%;
+    --neon-blue-glow: 195 100% 60%;
+    --neon-cyan: 180 100% 50%;
+    --neon-purple: 260 80% 50%;
   }
 }
 
@@ -57,5 +74,109 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+/* Custom utility classes for neon glow effects */
+@layer utilities {
+  .neon-glow {
+    box-shadow: 0 0 10px hsl(var(--neon-blue-glow)),
+                0 0 20px hsl(var(--neon-blue-glow)),
+                0 0 30px hsl(var(--neon-blue-glow)),
+                0 0 40px hsl(var(--neon-blue));
+  }
+  
+  .neon-text {
+    color: hsl(var(--neon-blue));
+    /* Minimal, precise glow with very small blur */
+    text-shadow: 
+      0 0 2px hsl(var(--neon-blue-glow)),
+      0 0 4px hsl(var(--neon-blue-glow) / 0.6);
+    /* Keep text rendering sharp */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  .neon-border {
+    border-color: hsl(var(--neon-blue));
+    box-shadow: 0 0 8px hsl(var(--neon-blue-glow)),
+                inset 0 0 8px hsl(var(--neon-blue-glow));
+  }
+  
+  .neon-cyan-glow {
+    box-shadow: 0 0 10px hsl(var(--neon-cyan)),
+                0 0 20px hsl(var(--neon-cyan)),
+                0 0 30px hsl(var(--neon-cyan));
+  }
+  
+  .neon-purple-glow {
+    box-shadow: 0 0 10px hsl(var(--neon-purple)),
+                0 0 20px hsl(var(--neon-purple)),
+                0 0 30px hsl(var(--neon-purple));
+  }
+  
+  /* Subtle glow for text */
+  .text-glow {
+    text-shadow: 0 0 5px currentColor;
+  }
+  
+  /* Glow on hover for interactive elements */
+  .glow-on-hover {
+    transition: all 0.3s ease;
+  }
+  
+  .glow-on-hover:hover {
+    box-shadow: 0 0 10px hsl(var(--neon-blue-glow)),
+                0 0 20px hsl(var(--neon-blue-glow));
+  }
+  
+  /* Card glow effect */
+  .card-glow {
+    box-shadow: 0 0 8px hsl(var(--neon-blue-glow) / 0.3),
+                0 0 16px hsl(var(--neon-blue-glow) / 0.2);
+    border-color: hsl(var(--neon-blue) / 0.5);
+  }
+  
+  /* Button glow effect */
+  .button-glow {
+    box-shadow: 0 0 6px hsl(var(--neon-blue-glow)),
+                0 0 12px hsl(var(--neon-blue-glow) / 0.5);
+  }
+  
+  /* Media card glow */
+  .media-card-glow {
+    box-shadow: 0 0 10px hsl(var(--neon-blue-glow) / 0.4),
+                0 0 20px hsl(var(--neon-blue-glow) / 0.3);
+    transition: all 0.3s ease;
+  }
+  
+  .media-card-glow:hover {
+    box-shadow: 0 0 15px hsl(var(--neon-blue-glow) / 0.6),
+                0 0 30px hsl(var(--neon-blue-glow) / 0.5);
+    transform: translateY(-2px);
+  }
+  
+  /* Chart glow effect */
+  .chart-glow {
+    filter: drop-shadow(0 0 8px hsl(var(--neon-cyan)))
+            drop-shadow(0 0 16px hsl(var(--neon-cyan) / 0.5));
+  }
+  
+  /* Icon glow */
+  .icon-glow {
+    filter: drop-shadow(0 0 4px hsl(var(--neon-blue-glow)));
+  }
+  
+  /* Input field glow on focus */
+  .input-glow {
+    transition: all 0.3s ease;
+  }
+  
+  .input-glow:focus {
+    outline: none;
+    border-color: hsl(var(--neon-blue));
+    box-shadow: 0 0 8px hsl(var(--neon-blue-glow)),
+                0 0 16px hsl(var(--neon-blue-glow) / 0.5),
+                inset 0 0 8px hsl(var(--neon-blue-glow) / 0.3);
   }
 }

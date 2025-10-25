@@ -231,31 +231,44 @@ const LiveBiddingSystemTab = () => {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500 bg-gradient-to-br from-slate-900 to-slate-800 min-h-screen p-6">
+    <div className="space-y-6 animate-in fade-in duration-500 min-h-screen p-3 sm:p-6 overflow-x-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white">Live Bidding System</h1>
-          <p className="text-lg text-slate-300">Boost to Top</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white neon-text">Live Bidding System</h1>
+          <p className="text-base sm:text-lg text-slate-300">Boost to Top</p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
-            <div className="w-6 h-6 bg-white rounded-sm"></div>
+          <div 
+            className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center"
+            style={{
+              boxShadow: '0 0 8px rgba(59, 130, 246, 0.6), 0 0 16px rgba(139, 92, 246, 0.5), 0 0 24px rgba(59, 130, 246, 0.3)'
+            }}
+          >
+            <span className="text-white font-bold text-base">K</span>
           </div>
-          <span className="text-white font-bold text-lg">KARDIVERSE</span>
+          <span 
+            className="font-bold text-base sm:text-lg neon-text"
+            style={{
+              color: 'hsl(195, 100%, 50%)',
+              textShadow: '0 0 3px hsl(195, 100%, 60%), 0 0 6px hsl(195, 100%, 60%)'
+            }}
+          >
+            KARDIVERSE
+          </span>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main Content - Bid Activity Table */}
         <div className="lg:col-span-2">
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-card border-border card-glow">
             <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-xl text-white">Bid Activity</CardTitle>
-                <div className="flex items-center gap-4">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <CardTitle className="text-xl text-white neon-text">Bid Activity</CardTitle>
+                <div className="flex flex-wrap items-center gap-3">
                   <div className="flex items-center gap-2">
-                    <label className="text-sm text-slate-300">Boost Amount:</label>
+                    <label className="text-sm text-slate-300 whitespace-nowrap">Boost:</label>
                     <select 
                       value={boostAmount} 
                       onChange={(e) => setBoostAmount(parseInt(e.target.value))}
@@ -268,147 +281,138 @@ const LiveBiddingSystemTab = () => {
                       <option value={10000}>10,000 pts</option>
                     </select>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => setIsLive(!isLive)}
-                      className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm transition-all duration-200 ${
-                        isLive 
-                          ? 'bg-green-500/20 text-green-400 border border-green-500/30' 
-                          : 'bg-red-500/20 text-red-400 border border-red-500/30'
-                      }`}
-                    >
-                      <div className={`w-2 h-2 rounded-full ${isLive ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
-                      {isLive ? 'Live Bidding' : 'Paused'}
-                    </button>
-                    <span className="text-xs text-slate-400">
-                      Last update: {lastUpdate.toLocaleTimeString()}
-                    </span>
-                  </div>
+                  <button
+                    onClick={() => setIsLive(!isLive)}
+                    className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm transition-all duration-200 ${
+                      isLive 
+                        ? 'bg-green-500/20 text-green-400 border border-green-500/30 glow-on-hover' 
+                        : 'bg-red-500/20 text-red-400 border border-red-500/30'
+                    }`}
+                  >
+                    <div className={`w-2 h-2 rounded-full ${isLive ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
+                    <span className="hidden sm:inline">{isLive ? 'Live Bidding' : 'Paused'}</span>
+                  </button>
+                  <span className="text-xs text-slate-400 whitespace-nowrap">
+                    {lastUpdate.toLocaleTimeString()}
+                  </span>
                 </div>
               </div>
             </CardHeader>
             <CardContent>
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="border-slate-700">
-                      <TableHead className="text-slate-300">Block Time</TableHead>
-                      <TableHead className="text-slate-300">Location</TableHead>
-                      <TableHead className="text-slate-300">Current Top Bidder</TableHead>
-                      <TableHead className="text-slate-300">Bid Amount</TableHead>
-                      <TableHead className="text-slate-300">Min Bid</TableHead>
-                      <TableHead className="text-slate-300">Slots Left</TableHead>
-                      <TableHead className="text-slate-300">Action</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {bidData.map((bid, index) => (
-                      <TableRow key={index} className="border-slate-700 hover:bg-slate-700/50">
-                        <TableCell className="text-white font-medium">{bid.blockTime}</TableCell>
-                        <TableCell className="text-white">{bid.location}</TableCell>
-                        <TableCell className="text-white">{bid.currentBidder}</TableCell>
-                        <TableCell className="text-white font-semibold">
-                          <div className="flex items-center gap-2">
-                            <span>{bid.bidAmount}</span>
-                            {isLive && (
-                              <div className="flex items-center gap-1">
-                                <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-                                <span className="text-xs text-green-400">LIVE</span>
-                              </div>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-slate-300">{bid.minBid}</TableCell>
-                        <TableCell className="text-white">
-                          <div className="flex items-center gap-2">
-                            <span>{bid.slotsLeft}</span>
-                            <div className={`w-2 h-2 rounded-full ${getStatusColor(bid.status)} ${isLive ? 'animate-pulse' : ''}`}></div>
-                            {isLive && (
-                              <div className="flex items-center gap-1">
-                                <div className="w-1 h-1 bg-green-500 rounded-full animate-pulse"></div>
-                                <span className="text-xs text-green-400">LIVE</span>
-                              </div>
-                            )}
-                          </div>
-                        </TableCell>
-                        <TableCell>
-                          <div className="flex flex-col gap-2">
-                            <Button 
-                              size="sm" 
-                              className={`bg-cyan-400 hover:bg-cyan-500 text-white transition-all duration-200 ${
-                                boostingIndex === index ? 'animate-pulse bg-blue-400' : ''
-                              }`}
-                              onClick={() => handleBoost(index)}
-                              disabled={boostingIndex === index}
-                            >
-                              {boostingIndex === index ? (
-                                <>
-                                  <RefreshCw className="h-3 w-3 mr-1 animate-spin" />
-                                  Boosting...
-                                </>
-                              ) : (
-                                <>
-                                  <Zap className="h-3 w-3 mr-1" />
-                                  Boost +{boostAmount.toLocaleString()}
-                                </>
-                              )}
-                            </Button>
-                            <div className="flex gap-1">
-                              <Button 
-                                size="sm" 
-                                variant="outline"
-                                className="text-xs px-2 py-1 border-blue-400 text-blue-400 hover:bg-blue-400/10"
-                                onClick={() => handleQuickBoost(index, 500)}
-                                disabled={boostingIndex === index}
-                              >
-                                +500
-                              </Button>
-                              <Button 
-                                size="sm" 
-                                variant="outline"
-                                className="text-xs px-2 py-1 border-green-400 text-green-400 hover:bg-green-400/10"
-                                onClick={() => handleQuickBoost(index, 2000)}
-                                disabled={boostingIndex === index}
-                              >
-                                +2K
-                              </Button>
-                              <Button 
-                                size="sm" 
-                                variant="outline"
-                                className="text-xs px-2 py-1 border-purple-400 text-purple-400 hover:bg-purple-400/10"
-                                onClick={() => handleQuickBoost(index, 5000)}
-                                disabled={boostingIndex === index}
-                              >
-                                +5K
-                              </Button>
-                            </div>
-                          </div>
-                        </TableCell>
+              <div className="overflow-x-auto -mx-1 px-1">
+                <div className="inline-block min-w-full align-middle">
+                  <Table className="w-full">
+                    <TableHeader>
+                      <TableRow className="border-slate-700">
+                        <TableHead className="text-slate-300 text-[11px] px-2 py-2 w-20">Time</TableHead>
+                        <TableHead className="text-slate-300 text-[11px] px-2 py-2 w-24">Location</TableHead>
+                        <TableHead className="text-slate-300 text-[11px] px-2 py-2 w-24">Bidder</TableHead>
+                        <TableHead className="text-slate-300 text-[11px] px-2 py-2 w-20">Amount</TableHead>
+                        <TableHead className="text-slate-300 text-[11px] px-2 py-2 w-16">Min</TableHead>
+                        <TableHead className="text-slate-300 text-[11px] px-2 py-2 w-20">Slots</TableHead>
+                        <TableHead className="text-slate-300 text-[11px] px-2 py-2">Action</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {bidData.map((bid, index) => (
+                        <TableRow key={index} className="border-slate-700 hover:bg-slate-700/50">
+                          <TableCell className="text-white font-medium text-xs px-2 py-2 whitespace-nowrap">{bid.blockTime}</TableCell>
+                          <TableCell className="text-white text-xs px-2 py-2 max-w-[100px] truncate">{bid.location}</TableCell>
+                          <TableCell className="text-white text-xs px-2 py-2 max-w-[90px] truncate">{bid.currentBidder}</TableCell>
+                          <TableCell className="text-white font-semibold text-xs px-2 py-2">
+                            <div className="flex flex-col gap-0.5">
+                              <span>{bid.bidAmount.replace(' pts', '')}</span>
+                              {isLive && (
+                                <div className="flex items-center gap-0.5">
+                                  <div className="w-1 h-1 bg-green-500 rounded-full animate-pulse"></div>
+                                  <span className="text-[9px] text-green-400">LIVE</span>
+                                </div>
+                              )}
+                            </div>
+                          </TableCell>
+                          <TableCell className="text-slate-300 text-xs px-2 py-2">{bid.minBid}</TableCell>
+                          <TableCell className="text-white text-xs px-2 py-2">
+                            <div className="flex items-center gap-1">
+                              <span>{bid.slotsLeft}</span>
+                              <div className={`w-1.5 h-1.5 rounded-full ${getStatusColor(bid.status)} ${isLive ? 'animate-pulse' : ''}`}></div>
+                            </div>
+                          </TableCell>
+                          <TableCell className="px-2 py-2">
+                            <div className="flex flex-col gap-1">
+                              <Button 
+                                size="sm" 
+                                className={`bg-cyan-400 hover:bg-cyan-500 text-white transition-all duration-200 text-[10px] px-2 py-1 h-7 button-glow ${
+                                  boostingIndex === index ? 'animate-pulse bg-blue-400' : ''
+                                }`}
+                                onClick={() => handleBoost(index)}
+                                disabled={boostingIndex === index}
+                              >
+                                {boostingIndex === index ? (
+                                  <RefreshCw className="h-2.5 w-2.5 animate-spin" />
+                                ) : (
+                                  <>
+                                    <Zap className="h-2.5 w-2.5 mr-0.5" />
+                                    +{boostAmount.toLocaleString()}
+                                  </>
+                                )}
+                              </Button>
+                              <div className="flex gap-0.5">
+                                <Button 
+                                  size="sm" 
+                                  variant="outline"
+                                  className="text-[9px] px-1 py-0.5 h-5 border-blue-400 text-blue-400 hover:bg-blue-400/10 flex-1"
+                                  onClick={() => handleQuickBoost(index, 500)}
+                                  disabled={boostingIndex === index}
+                                >
+                                  +500
+                                </Button>
+                                <Button 
+                                  size="sm" 
+                                  variant="outline"
+                                  className="text-[9px] px-1 py-0.5 h-5 border-green-400 text-green-400 hover:bg-green-400/10 flex-1"
+                                  onClick={() => handleQuickBoost(index, 2000)}
+                                  disabled={boostingIndex === index}
+                                >
+                                  +2K
+                                </Button>
+                                <Button 
+                                  size="sm" 
+                                  variant="outline"
+                                  className="text-[9px] px-1 py-0.5 h-5 border-purple-400 text-purple-400 hover:bg-purple-400/10 flex-1"
+                                  onClick={() => handleQuickBoost(index, 5000)}
+                                  disabled={boostingIndex === index}
+                                >
+                                  +5K
+                                </Button>
+                              </div>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
               </div>
 
               {/* Boost Statistics */}
-              <div className="mt-6 grid grid-cols-3 gap-4">
-                <div className="text-center p-3 bg-slate-700/50 rounded-lg">
-                  <div className="text-lg font-bold text-blue-400">
+              <div className="mt-6 grid grid-cols-3 gap-3 sm:gap-4">
+                <div className="text-center p-2.5 sm:p-3 bg-slate-700/50 rounded-lg card-glow border border-blue-400/30">
+                  <div className="text-base sm:text-lg font-bold text-blue-400 text-glow">
                     {bidData.reduce((sum, bid) => sum + parseInt(bid.bidAmount.replace(/[,\s]/g, '')), 0).toLocaleString()}
                   </div>
-                  <div className="text-xs text-slate-300">Total Bids</div>
+                  <div className="text-[10px] sm:text-xs text-slate-300">Total Bids</div>
                 </div>
-                <div className="text-center p-3 bg-slate-700/50 rounded-lg">
-                  <div className="text-lg font-bold text-green-400">
+                <div className="text-center p-2.5 sm:p-3 bg-slate-700/50 rounded-lg card-glow border border-green-400/30">
+                  <div className="text-base sm:text-lg font-bold text-green-400 text-glow">
                     {bidData.filter(bid => bid.status === 'active').length}
                   </div>
-                  <div className="text-xs text-slate-300">Active Slots</div>
+                  <div className="text-[10px] sm:text-xs text-slate-300">Active Slots</div>
                 </div>
-                <div className="text-center p-3 bg-slate-700/50 rounded-lg">
-                  <div className="text-lg font-bold text-orange-400">
+                <div className="text-center p-2.5 sm:p-3 bg-slate-700/50 rounded-lg card-glow border border-orange-400/30">
+                  <div className="text-base sm:text-lg font-bold text-orange-400 text-glow">
                     {bidData.reduce((sum, bid) => sum + parseInt(bid.slotsLeft), 0)}
                   </div>
-                  <div className="text-xs text-slate-300">Slots Remaining</div>
+                  <div className="text-[10px] sm:text-xs text-slate-300">Slots Remaining</div>
                 </div>
               </div>
               <div className="mt-6 flex items-center gap-6 text-sm">
@@ -467,9 +471,9 @@ const LiveBiddingSystemTab = () => {
         {/* Right Sidebar */}
         <div className="space-y-6">
           {/* Bid Activity Graph */}
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-card border-border card-glow border border-cyan-400/20">
             <CardHeader>
-              <CardTitle className="text-lg text-white">Bid Activity</CardTitle>
+              <CardTitle className="text-lg text-white neon-text">Bid Activity</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="h-32 relative">
@@ -501,12 +505,12 @@ const LiveBiddingSystemTab = () => {
           </Card>
 
           {/* AI Insight Card */}
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-card border-border card-glow border border-purple-400/20">
             <CardHeader>
               <CardTitle className="text-lg text-white flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <Brain className="h-5 w-5 text-cyan-400" />
-                  AI Insight
+                  <Brain className="h-5 w-5 text-cyan-400 icon-glow" />
+                  <span className="neon-text">AI Insight</span>
                 </div>
                 {isLive && (
                   <div className="flex items-center gap-1">

@@ -471,23 +471,23 @@ const SystemMonitorTab = () => {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500 bg-gradient-to-br from-slate-900 to-slate-800 min-h-screen p-6">
+    <div className="space-y-6 animate-in fade-in duration-500 min-h-screen p-6 bg-card">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Tab 6 - System Status & Troubleshooting</h1>
+          <h1 className="text-3xl font-bold text-white neon-text">Tab 6 - System Status & Troubleshooting</h1>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-          <span className="text-sm text-green-400 font-medium">Live Uptime Feed - NOC verified ✓</span>
+          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse icon-glow"></div>
+          <span className="text-sm text-green-400 font-medium text-glow">Live Uptime Feed - NOC verified ✓</span>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Panel - System Status Table */}
-        <Card className="bg-slate-800/50 border-slate-700">
+        <Card className="bg-card border-border card-glow border border-cyan-400/20">
           <CardHeader>
-            <CardTitle className="text-xl text-white">System Status</CardTitle>
+            <CardTitle className="text-xl text-white neon-text">System Status</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="overflow-x-auto">
@@ -502,14 +502,14 @@ const SystemMonitorTab = () => {
                 </TableHeader>
                 <TableBody>
                   {systemModules.map((module, index) => (
-                    <TableRow key={index} className="border-slate-700 hover:bg-slate-700/50">
-                      <TableCell className="text-white font-medium">{module.module}</TableCell>
+                    <TableRow key={index} className="border-slate-700 hover:bg-slate-700/50 glow-on-hover">
+                      <TableCell className="text-white font-medium text-glow">{module.module}</TableCell>
                       <TableCell>
-                        <span className={`font-medium ${getStatusColor(module.statusType)}`}>
+                        <span className={`font-medium text-glow ${getStatusColor(module.statusType)}`}>
                           {module.status}
                         </span>
                       </TableCell>
-                      <TableCell className="text-white">{module.uptime}</TableCell>
+                      <TableCell className="text-white text-glow">{module.uptime}</TableCell>
                       <TableCell className="text-white">{module.responseTime}</TableCell>
                     </TableRow>
                   ))}
@@ -520,22 +520,22 @@ const SystemMonitorTab = () => {
         </Card>
 
         {/* Right Panel - Performance Feed */}
-        <Card className="bg-slate-800/50 border-slate-700">
+        <Card className="bg-card border-border card-glow border border-purple-400/20">
           <CardHeader>
-            <CardTitle className="text-xl text-white">Performance Feed</CardTitle>
+            <CardTitle className="text-xl text-white neon-text">Performance Feed</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Incident Feed */}
             <div>
-              <h4 className="text-sm font-medium text-slate-300 mb-3">Incident Feed</h4>
+              <h4 className="text-sm font-medium text-slate-300 mb-3 text-glow">Incident Feed</h4>
               <div className="space-y-2">
                 {incidentFeed.map((incident, index) => (
-                  <div key={incident.id} className="flex items-center gap-2 p-2 bg-slate-700/50 rounded text-xs">
-                    <div className={`w-2 h-2 rounded-full ${
+                  <div key={incident.id} className="flex items-center gap-2 p-2 bg-slate-700/50 rounded text-xs glow-on-hover card-glow">
+                    <div className={`w-2 h-2 rounded-full icon-glow ${
                       incident.severity === 'high' ? 'bg-red-400' :
                       incident.severity === 'medium' ? 'bg-yellow-400' : 'bg-green-400'
                     }`}></div>
-                    <span className={`${getSeverityColor(incident.severity)}`}>
+                    <span className={`text-glow ${getSeverityColor(incident.severity)}`}>
                       {incident.message}
                     </span>
                   </div>
@@ -549,34 +549,34 @@ const SystemMonitorTab = () => {
                 variant="outline"
                 size="sm"
                 onClick={handleRunDiagnostics}
-                className="flex-1 border-cyan-400 text-cyan-400 hover:bg-cyan-400/10"
+                className="flex-1 border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 button-glow glow-on-hover"
               >
-                <Search className="h-4 w-4 mr-2" />
+                <Search className="h-4 w-4 mr-2 icon-glow" />
                 Run Diagnostics
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleArrowDown}
-                className="border-slate-400 text-slate-400 hover:bg-slate-400/10"
+                className="border-slate-400 text-slate-400 hover:bg-slate-400/10 glow-on-hover"
               >
-                <ArrowDown className="h-4 w-4" />
+                <ArrowDown className="h-4 w-4 icon-glow" />
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleLayers}
-                className="border-slate-400 text-slate-400 hover:bg-slate-400/10"
+                className="border-slate-400 text-slate-400 hover:bg-slate-400/10 glow-on-hover"
               >
-                <Layers className="h-4 w-4" />
+                <Layers className="h-4 w-4 icon-glow" />
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={handleOpenModuleControls}
-                className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10"
+                className="border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 button-glow glow-on-hover"
               >
-                <RefreshCw className="h-4 w-4 mr-2" />
+                <RefreshCw className="h-4 w-4 mr-2 icon-glow" />
                 Restart Module
               </Button>
             </div>
@@ -587,9 +587,9 @@ const SystemMonitorTab = () => {
       {/* Performance Graphs */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Graph - Line Chart */}
-        <Card className="bg-slate-800/50 border-slate-700">
+        <Card className="bg-card border-border card-glow border border-green-400/20">
           <CardHeader>
-            <CardTitle className="text-xl text-white">Performance</CardTitle>
+            <CardTitle className="text-xl text-white neon-text">Performance</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-64 bg-gradient-to-t from-slate-700/20 to-transparent rounded-lg p-4 relative">
@@ -652,9 +652,9 @@ const SystemMonitorTab = () => {
         </Card>
 
         {/* Right Graph - Bar Chart */}
-        <Card className="bg-slate-800/50 border-slate-700">
+        <Card className="bg-card border-border card-glow border border-blue-400/20">
           <CardHeader>
-            <CardTitle className="text-xl text-white">Performance</CardTitle>
+            <CardTitle className="text-xl text-white neon-text">Performance</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-64 bg-gradient-to-t from-slate-700/20 to-transparent rounded-lg p-4 relative">
@@ -720,15 +720,15 @@ const SystemMonitorTab = () => {
       </div>
 
       {/* AI Prediction */}
-      <Card className="bg-slate-800/50 border-slate-700 border-2 border-cyan-400/30 shadow-lg shadow-blue-400/20">
+      <Card className="bg-card border-border border-2 border-cyan-400/30 shadow-lg shadow-blue-400/20 card-glow">
         <CardContent className="p-6">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center">
-              <Zap className="w-4 h-4 text-cyan-400" />
+            <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center neon-glow">
+              <Zap className="w-4 h-4 text-cyan-400 icon-glow" />
             </div>
             <div>
-              <h3 className="text-lg font-semibold text-white">AI Prediction</h3>
-              <p className="text-sm text-cyan-300">{aiPrediction.message}</p>
+              <h3 className="text-lg font-semibold text-white neon-text">AI Prediction</h3>
+              <p className="text-sm text-cyan-300 text-glow">{aiPrediction.message}</p>
             </div>
           </div>
         </CardContent>
@@ -737,16 +737,16 @@ const SystemMonitorTab = () => {
       {/* Legend */}
       <div className="flex items-center justify-center gap-6">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-          <span className="text-sm text-white">Normal</span>
+          <div className="w-3 h-3 bg-green-400 rounded-full icon-glow"></div>
+          <span className="text-sm text-white text-glow">Normal</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-          <span className="text-sm text-white">Lag</span>
+          <div className="w-3 h-3 bg-yellow-400 rounded-full icon-glow"></div>
+          <span className="text-sm text-white text-glow">Lag</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-          <span className="text-sm text-white">Incident</span>
+          <div className="w-3 h-3 bg-red-400 rounded-full icon-glow"></div>
+          <span className="text-sm text-white text-glow">Incident</span>
         </div>
       </div>
 
@@ -754,18 +754,18 @@ const SystemMonitorTab = () => {
       <div className="flex items-center justify-between">
         <button
           onClick={handleExportLogs}
-          className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors"
+          className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors glow-on-hover"
         >
-          <Download className="h-4 w-4" />
-          <span>Export Logs</span>
+          <Download className="h-4 w-4 icon-glow" />
+          <span className="text-glow">Export Logs</span>
         </button>
         
         <button
           onClick={handleNOCDashboard}
-          className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors"
+          className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors glow-on-hover"
         >
-          <Server className="h-4 w-4" />
-          <span>NOC Dashboard</span>
+          <Server className="h-4 w-4 icon-glow" />
+          <span className="text-glow">NOC Dashboard</span>
         </button>
       </div>
 
@@ -792,59 +792,59 @@ const SystemMonitorTab = () => {
           <div className="space-y-6">
             {/* System Health Overview */}
             <div className="grid grid-cols-3 gap-4">
-              <Card className="bg-slate-800/50 border-slate-700">
+              <Card className="bg-card border-border card-glow border border-green-400/20">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <CheckCircle className="h-4 w-4 text-green-400" />
                     <span className="text-sm text-slate-300">Healthy Modules</span>
                   </div>
-                  <div className="text-2xl font-bold text-white">3/5</div>
+                  <div className="text-2xl font-bold text-white neon-text">3/5</div>
                   <div className="text-xs text-green-400">60% operational</div>
                 </CardContent>
               </Card>
               
-              <Card className="bg-slate-800/50 border-slate-700">
+              <Card className="bg-card border-border card-glow border border-yellow-400/20">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <AlertTriangle className="h-4 w-4 text-yellow-400" />
                     <span className="text-sm text-slate-300">Issues Detected</span>
                   </div>
-                  <div className="text-2xl font-bold text-white">2</div>
+                  <div className="text-2xl font-bold text-white neon-text">2</div>
                   <div className="text-xs text-yellow-400">Requires attention</div>
                 </CardContent>
               </Card>
               
-              <Card className="bg-slate-800/50 border-slate-700">
+              <Card className="bg-card border-border card-glow border border-cyan-400/20">
                 <CardContent className="p-4">
                   <div className="flex items-center gap-2 mb-2">
                     <Activity className="h-4 w-4 text-cyan-400" />
                     <span className="text-sm text-slate-300">Avg Response Time</span>
                   </div>
-                  <div className="text-2xl font-bold text-white">45ms</div>
+                  <div className="text-2xl font-bold text-white neon-text">45ms</div>
                   <div className="text-xs text-cyan-400">Within acceptable range</div>
                 </CardContent>
               </Card>
             </div>
 
             {/* Detailed Diagnostics */}
-            <Card className="bg-slate-800/50 border-slate-700">
+            <Card className="bg-card border-border card-glow border border-slate-400/20">
               <CardHeader>
-                <CardTitle className="text-lg text-white">Detailed Diagnostics</CardTitle>
+                <CardTitle className="text-lg text-white neon-text">Detailed Diagnostics</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   {systemModules.map((module, index) => (
-                    <div key={index} className="flex items-center justify-between p-3 bg-slate-700/50 rounded">
+                    <div key={index} className="flex items-center justify-between p-3 bg-slate-700/50 rounded glow-on-hover">
                       <div className="flex items-center gap-3">
-                        <div className={`w-3 h-3 rounded-full ${
+                        <div className={`w-3 h-3 rounded-full icon-glow ${
                           module.statusType === 'online' ? 'bg-green-400' :
                           module.statusType === 'lag' ? 'bg-yellow-400' :
                           module.statusType === 'warning' ? 'bg-orange-400' : 'bg-red-400'
                         }`}></div>
-                        <span className="font-medium text-white">{module.module}</span>
+                        <span className="font-medium text-white neon-text">{module.module}</span>
                       </div>
                       <div className="flex items-center gap-4 text-sm">
-                        <span className={`${getStatusColor(module.statusType)}`}>
+                        <span className={`text-glow ${getStatusColor(module.statusType)}`}>
                           {module.status}
                         </span>
                         <span className="text-slate-300">Uptime: {module.uptime}</span>
@@ -857,21 +857,21 @@ const SystemMonitorTab = () => {
             </Card>
 
             {/* Recommendations */}
-            <Card className="bg-slate-800/50 border-slate-700">
+            <Card className="bg-card border-border card-glow border border-yellow-400/20">
               <CardHeader>
-                <CardTitle className="text-lg text-white">Recommendations</CardTitle>
+                <CardTitle className="text-lg text-white neon-text">Recommendations</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  <div className="flex items-center gap-2 p-2 bg-yellow-500/10 rounded">
+                  <div className="flex items-center gap-2 p-2 bg-yellow-500/10 rounded glow-on-hover">
                     <AlertTriangle className="h-4 w-4 text-yellow-400" />
                     <span className="text-sm text-yellow-400">Dashboard Backend: Consider scaling resources</span>
                   </div>
-                  <div className="flex items-center gap-2 p-2 bg-red-500/10 rounded">
+                  <div className="flex items-center gap-2 p-2 bg-red-500/10 rounded glow-on-hover">
                     <AlertCircle className="h-4 w-4 text-red-400" />
                     <span className="text-sm text-red-400">CDN / Cache: Immediate attention required</span>
                   </div>
-                  <div className="flex items-center gap-2 p-2 bg-green-500/10 rounded">
+                  <div className="flex items-center gap-2 p-2 bg-green-500/10 rounded glow-on-hover">
                     <CheckCircle className="h-4 w-4 text-green-400" />
                     <span className="text-sm text-green-400">API Server: Performance optimal</span>
                   </div>
@@ -884,7 +884,7 @@ const SystemMonitorTab = () => {
               <Button
                 variant="outline"
                 onClick={() => setShowDiagnostics(false)}
-                className="flex-1 border-slate-400 text-slate-400 hover:bg-slate-400/10"
+                className="flex-1 border-slate-400 text-slate-400 hover:bg-slate-400/10 glow-on-hover"
               >
                 <X className="h-4 w-4 mr-2" />
                 Close
@@ -892,7 +892,7 @@ const SystemMonitorTab = () => {
               <Button
                 variant="outline"
                 onClick={handleExportLogs}
-                className="flex-1 border-cyan-400 text-cyan-400 hover:bg-cyan-400/10"
+                className="flex-1 border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 button-glow glow-on-hover"
               >
                 <Download className="h-4 w-4 mr-2" />
                 Export Diagnostics
@@ -917,18 +917,18 @@ const SystemMonitorTab = () => {
           
           <div className="space-y-4">
             {systemModules.map((module, index) => (
-              <Card key={index} className="bg-slate-800/50 border-slate-700">
+              <Card key={index} className="bg-card border-border card-glow border border-cyan-400/20">
                 <CardContent className="p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className={`w-3 h-3 rounded-full ${
+                      <div className={`w-3 h-3 rounded-full icon-glow ${
                         module.statusType === 'online' ? 'bg-green-400' :
                         module.statusType === 'lag' ? 'bg-yellow-400' :
                         module.statusType === 'warning' ? 'bg-orange-400' : 'bg-red-400'
                       }`}></div>
                       <div>
-                        <div className="font-medium text-white">{module.module}</div>
-                        <div className={`text-sm ${getStatusColor(module.statusType)}`}>
+                        <div className="font-medium text-white neon-text">{module.module}</div>
+                        <div className={`text-sm text-glow ${getStatusColor(module.statusType)}`}>
                           {module.status}
                         </div>
                       </div>
@@ -939,11 +939,11 @@ const SystemMonitorTab = () => {
                         size="sm"
                         onClick={() => handleRestartModule(module, index)}
                         disabled={buttonStates[`restart-${index}`] === 'loading'}
-                        className={`border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 ${
+                        className={`border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 button-glow glow-on-hover ${
                           buttonStates[`restart-${index}`] === 'success' ? 'bg-green-500/20 border-green-400' : ''
                         }`}
                       >
-                        <RefreshCw className={`h-4 w-4 mr-1 ${
+                        <RefreshCw className={`h-4 w-4 mr-1 icon-glow ${
                           buttonStates[`restart-${index}`] === 'loading' ? 'animate-spin' : ''
                         }`} />
                         {buttonStates[`restart-${index}`] === 'loading' ? 'Restarting...' : 
@@ -954,11 +954,11 @@ const SystemMonitorTab = () => {
                         size="sm"
                         onClick={() => handleStopModule(module, index)}
                         disabled={buttonStates[`stop-${index}`] === 'loading'}
-                        className={`border-red-400 text-red-400 hover:bg-red-400/10 ${
+                        className={`border-red-400 text-red-400 hover:bg-red-400/10 button-glow glow-on-hover ${
                           buttonStates[`stop-${index}`] === 'success' ? 'bg-green-500/20 border-green-400' : ''
                         }`}
                       >
-                        <X className={`h-4 w-4 mr-1 ${
+                        <X className={`h-4 w-4 mr-1 icon-glow ${
                           buttonStates[`stop-${index}`] === 'loading' ? 'animate-spin' : ''
                         }`} />
                         {buttonStates[`stop-${index}`] === 'loading' ? 'Stopping...' : 
@@ -969,11 +969,11 @@ const SystemMonitorTab = () => {
                         size="sm"
                         onClick={() => handleConfigureModule(module, index)}
                         disabled={buttonStates[`config-${index}`] === 'loading'}
-                        className={`border-slate-400 text-slate-400 hover:bg-slate-400/10 ${
+                        className={`border-slate-400 text-slate-400 hover:bg-slate-400/10 button-glow glow-on-hover ${
                           buttonStates[`config-${index}`] === 'success' ? 'bg-green-500/20 border-green-400' : ''
                         }`}
                       >
-                        <Settings className={`h-4 w-4 mr-1 ${
+                        <Settings className={`h-4 w-4 mr-1 icon-glow ${
                           buttonStates[`config-${index}`] === 'loading' ? 'animate-spin' : ''
                         }`} />
                         {buttonStates[`config-${index}`] === 'loading' ? 'Configuring...' : 
@@ -989,7 +989,7 @@ const SystemMonitorTab = () => {
               <Button
                 variant="outline"
                 onClick={() => setShowModuleControls(false)}
-                className="flex-1 border-slate-400 text-slate-400 hover:bg-slate-400/10"
+                className="flex-1 border-slate-400 text-slate-400 hover:bg-slate-400/10 glow-on-hover"
               >
                 <X className="h-4 w-4 mr-2" />
                 Close
@@ -997,7 +997,7 @@ const SystemMonitorTab = () => {
               <Button
                 variant="outline"
                 onClick={handleRestartAllModules}
-                className="flex-1 border-orange-400 text-orange-400 hover:bg-orange-400/10"
+                className="flex-1 border-orange-400 text-orange-400 hover:bg-orange-400/10 button-glow glow-on-hover"
               >
                 <RefreshCw className="h-4 w-4 mr-2" />
                 Restart All
@@ -1023,41 +1023,41 @@ const SystemMonitorTab = () => {
           <div className="space-y-6">
             {/* Performance Summary */}
             <div className="grid grid-cols-4 gap-4">
-              <Card className="bg-slate-800/50 border-slate-700">
+              <Card className="bg-card border-border card-glow border border-green-400/20">
                 <CardContent className="p-4 text-center">
-                  <div className="text-2xl font-bold text-green-400">98.5%</div>
+                  <div className="text-2xl font-bold text-green-400 neon-text">98.5%</div>
                   <div className="text-sm text-slate-300">Overall Uptime</div>
                 </CardContent>
               </Card>
-              <Card className="bg-slate-800/50 border-slate-700">
+              <Card className="bg-card border-border card-glow border border-cyan-400/20">
                 <CardContent className="p-4 text-center">
-                  <div className="text-2xl font-bold text-cyan-400">45ms</div>
+                  <div className="text-2xl font-bold text-cyan-400 neon-text">45ms</div>
                   <div className="text-sm text-slate-300">Avg Response</div>
                 </CardContent>
               </Card>
-              <Card className="bg-slate-800/50 border-slate-700">
+              <Card className="bg-card border-border card-glow border border-yellow-400/20">
                 <CardContent className="p-4 text-center">
-                  <div className="text-2xl font-bold text-yellow-400">2</div>
+                  <div className="text-2xl font-bold text-yellow-400 neon-text">2</div>
                   <div className="text-sm text-slate-300">Active Issues</div>
                 </CardContent>
               </Card>
-              <Card className="bg-slate-800/50 border-slate-700">
+              <Card className="bg-card border-border card-glow border border-purple-400/20">
                 <CardContent className="p-4 text-center">
-                  <div className="text-2xl font-bold text-purple-400">156</div>
+                  <div className="text-2xl font-bold text-purple-400 neon-text">156</div>
                   <div className="text-sm text-slate-300">Requests/min</div>
                 </CardContent>
               </Card>
             </div>
 
             {/* Performance Trends */}
-            <Card className="bg-slate-800/50 border-slate-700">
+            <Card className="bg-card border-border card-glow border border-blue-400/20">
               <CardHeader>
-                <CardTitle className="text-lg text-white">Performance Trends</CardTitle>
+                <CardTitle className="text-lg text-white neon-text">Performance Trends</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded">
-                    <span className="text-white">CPU Usage</span>
+                  <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded glow-on-hover">
+                    <span className="text-white neon-text">CPU Usage</span>
                     <div className="flex items-center gap-2">
                       <div className="w-32 bg-slate-600 rounded-full h-2">
                         <div className="bg-green-400 h-2 rounded-full" style={{width: '65%'}}></div>
@@ -1065,8 +1065,8 @@ const SystemMonitorTab = () => {
                       <span className="text-sm text-green-400">65%</span>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded">
-                    <span className="text-white">Memory Usage</span>
+                  <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded glow-on-hover">
+                    <span className="text-white neon-text">Memory Usage</span>
                     <div className="flex items-center gap-2">
                       <div className="w-32 bg-slate-600 rounded-full h-2">
                         <div className="bg-yellow-400 h-2 rounded-full" style={{width: '78%'}}></div>
@@ -1074,8 +1074,8 @@ const SystemMonitorTab = () => {
                       <span className="text-sm text-yellow-400">78%</span>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded">
-                    <span className="text-white">Disk Usage</span>
+                  <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded glow-on-hover">
+                    <span className="text-white neon-text">Disk Usage</span>
                     <div className="flex items-center gap-2">
                       <div className="w-32 bg-slate-600 rounded-full h-2">
                         <div className="bg-cyan-400 h-2 rounded-full" style={{width: '45%'}}></div>
@@ -1083,8 +1083,8 @@ const SystemMonitorTab = () => {
                       <span className="text-sm text-cyan-400">45%</span>
                     </div>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded">
-                    <span className="text-white">Network I/O</span>
+                  <div className="flex items-center justify-between p-3 bg-slate-700/50 rounded glow-on-hover">
+                    <span className="text-white neon-text">Network I/O</span>
                     <div className="flex items-center gap-2">
                       <div className="w-32 bg-slate-600 rounded-full h-2">
                         <div className="bg-green-400 h-2 rounded-full" style={{width: '32%'}}></div>
@@ -1101,7 +1101,7 @@ const SystemMonitorTab = () => {
               <Button
                 variant="outline"
                 onClick={() => setShowPerformanceMetrics(false)}
-                className="flex-1 border-slate-400 text-slate-400 hover:bg-slate-400/10"
+                className="flex-1 border-slate-400 text-slate-400 hover:bg-slate-400/10 glow-on-hover"
               >
                 <X className="h-4 w-4 mr-2" />
                 Close
@@ -1109,7 +1109,7 @@ const SystemMonitorTab = () => {
               <Button
                 variant="outline"
                 onClick={() => alert("Exporting performance metrics...")}
-                className="flex-1 border-cyan-400 text-cyan-400 hover:bg-cyan-400/10"
+                className="flex-1 border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 button-glow glow-on-hover"
               >
                 <Download className="h-4 w-4 mr-2" />
                 Export Metrics
@@ -1134,9 +1134,9 @@ const SystemMonitorTab = () => {
           
           <div className="space-y-6">
             {/* Layer 1 - Frontend Layer */}
-            <Card className="bg-slate-800/50 border-slate-700">
+            <Card className="bg-card border-border card-glow border border-cyan-400/20">
               <CardHeader>
-                <CardTitle className="text-lg text-white flex items-center gap-2">
+                <CardTitle className="text-lg text-white neon-text flex items-center gap-2">
                   <div className="w-3 h-3 bg-cyan-400 rounded-full"></div>
                   Layer 1: Frontend & User Interface
                 </CardTitle>
@@ -1144,36 +1144,36 @@ const SystemMonitorTab = () => {
               <CardContent>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">Dashboard UI</span>
+                      <span className="text-sm text-white neon-text">Dashboard UI</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">React Components</span>
+                      <span className="text-sm text-white neon-text">React Components</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">Real-time Updates</span>
+                      <span className="text-sm text-white neon-text">Real-time Updates</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">WebSocket Client</span>
+                      <span className="text-sm text-white neon-text">WebSocket Client</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                      <span className="text-sm text-white">CDN Cache</span>
+                      <span className="text-sm text-white neon-text">CDN Cache</span>
                       <span className="text-xs text-yellow-400 ml-auto">Lag</span>
                     </div>
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">Static Assets</span>
+                      <span className="text-sm text-white neon-text">Static Assets</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
                   </div>
@@ -1182,9 +1182,9 @@ const SystemMonitorTab = () => {
             </Card>
 
             {/* Layer 2 - API Gateway */}
-            <Card className="bg-slate-800/50 border-slate-700">
+            <Card className="bg-card border-border card-glow border border-purple-400/20">
               <CardHeader>
-                <CardTitle className="text-lg text-white flex items-center gap-2">
+                <CardTitle className="text-lg text-white neon-text flex items-center gap-2">
                   <div className="w-3 h-3 bg-purple-400 rounded-full"></div>
                   Layer 2: API Gateway & Load Balancer
                 </CardTitle>
@@ -1192,36 +1192,36 @@ const SystemMonitorTab = () => {
               <CardContent>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">API Gateway</span>
+                      <span className="text-sm text-white neon-text">API Gateway</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">Load Balancer</span>
+                      <span className="text-sm text-white neon-text">Load Balancer</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">Rate Limiter</span>
+                      <span className="text-sm text-white neon-text">Rate Limiter</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">SSL Termination</span>
+                      <span className="text-sm text-white neon-text">SSL Termination</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">Request Router</span>
+                      <span className="text-sm text-white neon-text">Request Router</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">Health Checker</span>
+                      <span className="text-sm text-white neon-text">Health Checker</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
                   </div>
@@ -1230,9 +1230,9 @@ const SystemMonitorTab = () => {
             </Card>
 
             {/* Layer 3 - Application Services */}
-            <Card className="bg-slate-800/50 border-slate-700">
+            <Card className="bg-card border-border card-glow border border-orange-400/20">
               <CardHeader>
-                <CardTitle className="text-lg text-white flex items-center gap-2">
+                <CardTitle className="text-lg text-white neon-text flex items-center gap-2">
                   <div className="w-3 h-3 bg-orange-400 rounded-full"></div>
                   Layer 3: Application Services
                 </CardTitle>
@@ -1240,36 +1240,36 @@ const SystemMonitorTab = () => {
               <CardContent>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">API Server</span>
+                      <span className="text-sm text-white neon-text">API Server</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-yellow-400 rounded-full"></div>
-                      <span className="text-sm text-white">Dashboard Backend</span>
+                      <span className="text-sm text-white neon-text">Dashboard Backend</span>
                       <span className="text-xs text-yellow-400 ml-auto">Lag</span>
                     </div>
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">License Server</span>
+                      <span className="text-sm text-white neon-text">License Server</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">Authentication</span>
+                      <span className="text-sm text-white neon-text">Authentication</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">Session Manager</span>
+                      <span className="text-sm text-white neon-text">Session Manager</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">Business Logic</span>
+                      <span className="text-sm text-white neon-text">Business Logic</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
                   </div>
@@ -1278,9 +1278,9 @@ const SystemMonitorTab = () => {
             </Card>
 
             {/* Layer 4 - Data Layer */}
-            <Card className="bg-slate-800/50 border-slate-700">
+            <Card className="bg-card border-border card-glow border border-red-400/20">
               <CardHeader>
-                <CardTitle className="text-lg text-white flex items-center gap-2">
+                <CardTitle className="text-lg text-white neon-text flex items-center gap-2">
                   <div className="w-3 h-3 bg-red-400 rounded-full"></div>
                   Layer 4: Data & Storage Layer
                 </CardTitle>
@@ -1288,36 +1288,36 @@ const SystemMonitorTab = () => {
               <CardContent>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-orange-400 rounded-full"></div>
-                      <span className="text-sm text-white">Database Cluster</span>
+                      <span className="text-sm text-white neon-text">Database Cluster</span>
                       <span className="text-xs text-orange-400 ml-auto">Warning</span>
                     </div>
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-red-400 rounded-full"></div>
-                      <span className="text-sm text-white">CDN / Cache</span>
+                      <span className="text-sm text-white neon-text">CDN / Cache</span>
                       <span className="text-xs text-red-400 ml-auto">Down</span>
                     </div>
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">Redis Cache</span>
+                      <span className="text-sm text-white neon-text">Redis Cache</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">File Storage</span>
+                      <span className="text-sm text-white neon-text">File Storage</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">Backup System</span>
+                      <span className="text-sm text-white neon-text">Backup System</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">Data Replication</span>
+                      <span className="text-sm text-white neon-text">Data Replication</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
                   </div>
@@ -1326,9 +1326,9 @@ const SystemMonitorTab = () => {
             </Card>
 
             {/* Layer 5 - Infrastructure */}
-            <Card className="bg-slate-800/50 border-slate-700">
+            <Card className="bg-card border-border card-glow border border-teal-400/20">
               <CardHeader>
-                <CardTitle className="text-lg text-white flex items-center gap-2">
+                <CardTitle className="text-lg text-white neon-text flex items-center gap-2">
                   <div className="w-3 h-3 bg-teal-400 rounded-full"></div>
                   Layer 5: Infrastructure & Monitoring
                 </CardTitle>
@@ -1336,36 +1336,36 @@ const SystemMonitorTab = () => {
               <CardContent>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">System Monitor</span>
+                      <span className="text-sm text-white neon-text">System Monitor</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">Log Aggregator</span>
+                      <span className="text-sm text-white neon-text">Log Aggregator</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">Alert Manager</span>
+                      <span className="text-sm text-white neon-text">Alert Manager</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">Metrics Collector</span>
+                      <span className="text-sm text-white neon-text">Metrics Collector</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">Health Checker</span>
+                      <span className="text-sm text-white neon-text">Health Checker</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
-                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded">
+                    <div className="flex items-center gap-2 p-2 bg-slate-700/50 rounded glow-on-hover">
                       <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      <span className="text-sm text-white">NOC Integration</span>
+                      <span className="text-sm text-white neon-text">NOC Integration</span>
                       <span className="text-xs text-green-400 ml-auto">Online</span>
                     </div>
                   </div>
@@ -1374,33 +1374,33 @@ const SystemMonitorTab = () => {
             </Card>
 
             {/* Layer Dependencies */}
-            <Card className="bg-slate-800/50 border-slate-700">
+            <Card className="bg-card border-border card-glow border border-slate-400/20">
               <CardHeader>
-                <CardTitle className="text-lg text-white">Layer Dependencies</CardTitle>
+                <CardTitle className="text-lg text-white neon-text">Layer Dependencies</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded">
+                  <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded glow-on-hover">
                     <div className="w-3 h-3 bg-cyan-400 rounded-full"></div>
-                    <span className="text-sm text-white">Frontend Layer</span>
+                    <span className="text-sm text-white neon-text">Frontend Layer</span>
                     <ArrowRight className="h-4 w-4 text-slate-400" />
                     <span className="text-xs text-slate-400">Depends on API Gateway</span>
                   </div>
-                  <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded">
+                  <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded glow-on-hover">
                     <div className="w-3 h-3 bg-purple-400 rounded-full"></div>
-                    <span className="text-sm text-white">API Gateway</span>
+                    <span className="text-sm text-white neon-text">API Gateway</span>
                     <ArrowRight className="h-4 w-4 text-slate-400" />
                     <span className="text-xs text-slate-400">Routes to Application Services</span>
                   </div>
-                  <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded">
+                  <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded glow-on-hover">
                     <div className="w-3 h-3 bg-orange-400 rounded-full"></div>
-                    <span className="text-sm text-white">Application Services</span>
+                    <span className="text-sm text-white neon-text">Application Services</span>
                     <ArrowRight className="h-4 w-4 text-slate-400" />
                     <span className="text-xs text-slate-400">Accesses Data Layer</span>
                   </div>
-                  <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded">
+                  <div className="flex items-center gap-3 p-3 bg-slate-700/50 rounded glow-on-hover">
                     <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                    <span className="text-sm text-white">Data Layer</span>
+                    <span className="text-sm text-white neon-text">Data Layer</span>
                     <ArrowRight className="h-4 w-4 text-slate-400" />
                     <span className="text-xs text-slate-400">Monitored by Infrastructure</span>
                   </div>
@@ -1413,7 +1413,7 @@ const SystemMonitorTab = () => {
               <Button
                 variant="outline"
                 onClick={() => setShowModuleLayers(false)}
-                className="flex-1 border-slate-400 text-slate-400 hover:bg-slate-400/10"
+                className="flex-1 border-slate-400 text-slate-400 hover:bg-slate-400/10 glow-on-hover"
               >
                 <X className="h-4 w-4 mr-2" />
                 Close
@@ -1421,7 +1421,7 @@ const SystemMonitorTab = () => {
               <Button
                 variant="outline"
                 onClick={() => alert("Exporting layer architecture...")}
-                className="flex-1 border-cyan-400 text-cyan-400 hover:bg-cyan-400/10"
+                className="flex-1 border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 button-glow glow-on-hover"
               >
                 <Download className="h-4 w-4 mr-2" />
                 Export Architecture

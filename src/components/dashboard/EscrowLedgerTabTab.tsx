@@ -439,23 +439,13 @@ const EscrowLedgerTab = () => {
             <span className="text-sm text-cyan-300 text-glow">Pesa</span>
             <span className="text-sm text-cyan-300 text-glow">SEPA</span>
           </div>
-          <div 
-            className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center"
-            style={{
-              boxShadow: '0 0 8px rgba(59, 130, 246, 0.6), 0 0 16px rgba(139, 92, 246, 0.5), 0 0 24px rgba(59, 130, 246, 0.3)'
-            }}
-          >
-            <span className="text-white font-bold text-base">K</span>
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center neon-glow">
+            <Shield className="w-6 h-6 text-white icon-glow" />
           </div>
-          <span 
-            className="font-bold text-base sm:text-lg neon-text"
-            style={{
-              color: 'hsl(195, 100%, 50%)',
-              textShadow: '0 0 3px hsl(195, 100%, 60%), 0 0 6px hsl(195, 100%, 60%)'
-            }}
-          >
-            KARDIVERSE
-          </span>
+              <div className="text-right">
+            <div className="text-lg font-bold text-white neon-text">Kardiverse</div>
+            <div className="text-xs text-cyan-300 text-glow">K</div>
+              </div>
             </div>
           </div>
 

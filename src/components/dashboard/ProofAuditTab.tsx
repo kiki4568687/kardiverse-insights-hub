@@ -336,11 +336,11 @@ const ProofAuditTab = () => {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500 bg-gradient-to-br from-slate-900 to-slate-800 min-h-screen p-6">
+    <div className="space-y-6 animate-in fade-in duration-500 min-h-screen p-6">
       {/* Header */}
           <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Tab 4 - Proof & Audit Monitor</h1>
+          <h1 className="text-3xl font-bold text-white neon-text">Tab 4 - Proof & Audit Monitor</h1>
           {isLive && (
             <div className="flex items-center gap-2 mt-2">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
@@ -363,18 +363,32 @@ const ProofAuditTab = () => {
             <div className={`w-2 h-2 rounded-full ${isLive ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></div>
             {isLive ? 'Live Updates' : 'Paused'}
           </button>
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
-            <div className="w-6 h-6 bg-white rounded-sm"></div>
+          <div 
+            className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center"
+            style={{
+              boxShadow: '0 0 8px rgba(59, 130, 246, 0.6), 0 0 16px rgba(139, 92, 246, 0.5), 0 0 24px rgba(59, 130, 246, 0.3)'
+            }}
+          >
+            <span className="text-white font-bold text-base">K</span>
           </div>
+          <span 
+            className="font-bold text-base sm:text-lg neon-text"
+            style={{
+              color: 'hsl(195, 100%, 50%)',
+              textShadow: '0 0 3px hsl(195, 100%, 60%), 0 0 6px hsl(195, 100%, 60%)'
+            }}
+          >
+            KARDIVERSE
+          </span>
               </div>
               </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Panel - Proof */}
-        <Card className="bg-slate-800/50 border-slate-700">
+        <Card className="bg-card border-border card-glow border border-cyan-400/20">
           <CardHeader>
             <div className="flex items-center justify-between">
-              <CardTitle className="text-xl text-white">Proof</CardTitle>
+              <CardTitle className="text-xl text-white neon-text">Proof</CardTitle>
               {isLive && (
                 <div className="flex items-center gap-1 bg-green-500/20 px-2 py-1 rounded-full">
                   <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
@@ -400,8 +414,8 @@ const ProofAuditTab = () => {
                   {proofData.map((proof, index) => (
                     <TableRow 
                       key={index} 
-                      className={`border-slate-700 hover:bg-slate-700/50 cursor-pointer ${
-                        selectedProof === index ? 'bg-slate-700/30' : ''
+                      className={`border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all duration-200 ${
+                        selectedProof === index ? 'bg-slate-700/30 border-2 border-green-400/50 glow-on-hover card-glow' : ''
                       }`}
                       onClick={() => setSelectedProof(index)}
                     >
@@ -413,7 +427,7 @@ const ProofAuditTab = () => {
                       <TableCell>
                         <div className="flex items-center gap-2">
                           {getStatusIcon(proof.status)}
-                          <span className={`text-sm ${getStatusColor(proof.status)}`}>
+                          <span className={`text-sm ${getStatusColor(proof.status)} text-glow`}>
                             {proof.status}
                           </span>
                         </div>
@@ -447,15 +461,15 @@ const ProofAuditTab = () => {
         </Card>
 
         {/* Right Panel - Audit Detail */}
-        <Card className="bg-slate-800/50 border-slate-700">
+        <Card className="bg-card border-border card-glow border border-purple-400/20">
           <CardHeader>
-            <CardTitle className="text-xl text-white">Audit Detail</CardTitle>
+            <CardTitle className="text-xl text-white neon-text">Audit Detail</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Blockchain Proof Viewer */}
             <div>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-lg font-semibold text-white">Blockchain Proof Viewer</h3>
+                <h3 className="text-lg font-semibold text-white neon-text">Blockchain Proof Viewer</h3>
                 {isLive && (
                   <div className="flex items-center gap-1 bg-green-500/20 px-2 py-1 rounded-full">
                     <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
@@ -465,8 +479,8 @@ const ProofAuditTab = () => {
               </div>
               <div className="space-y-2">
                 {blockchainProofs.map((proof, index) => (
-                  <div key={index} className="flex items-center gap-3 p-2 bg-slate-700/50 rounded">
-                    <div className={`w-2 h-2 bg-cyan-400 rounded-full ${isLive ? 'animate-pulse' : ''}`}></div>
+                  <div key={index} className={`flex items-center gap-3 p-2 bg-slate-700/50 rounded ${index === 0 && isLive ? 'card-glow glow-on-hover border border-cyan-400/30' : ''}`}>
+                    <div className={`w-2 h-2 bg-cyan-400 rounded-full icon-glow ${isLive ? 'animate-pulse' : ''}`}></div>
                     <div className="flex-1">
                       <div className="text-white font-mono text-sm">{proof.hash}</div>
                       {proof.timestamp && (
@@ -486,8 +500,8 @@ const ProofAuditTab = () => {
 
             {/* Snapshot Preview */}
             <div>
-              <h3 className="text-lg font-semibold text-white mb-3">Snapshot Preview</h3>
-              <div className="flex items-center gap-4 p-4 bg-slate-700/50 rounded">
+              <h3 className="text-lg font-semibold text-white mb-3 neon-text">Snapshot Preview</h3>
+              <div className="flex items-center gap-4 p-4 bg-slate-700/50 rounded card-glow">
                 <div className="flex-1">
                   <p className="text-slate-300 text-sm">
                     Signed by Adv, Myvangi-Kardiverse Notary Chain
@@ -496,7 +510,7 @@ const ProofAuditTab = () => {
                     UID: {proofData[selectedProof].uid} | Status: {proofData[selectedProof].status}
                   </p>
                 </div>
-                <div className="w-16 h-16 bg-white rounded border-2 border-slate-400 flex items-center justify-center relative overflow-hidden">
+                <div className="w-16 h-16 bg-white rounded border-2 border-cyan-400/50 flex items-center justify-center relative overflow-hidden card-glow icon-glow">
                   {qrCodeDataURL ? (
                     <img 
                       src={qrCodeDataURL} 
@@ -510,7 +524,7 @@ const ProofAuditTab = () => {
             </div>
 
               {/* QR Code Data Display */}
-              <div className="mt-3 p-3 bg-slate-800/50 rounded text-xs">
+              <div className="mt-3 p-3 bg-muted/50 rounded text-xs">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <p className="text-slate-400">QR Code contains:</p>
@@ -524,7 +538,7 @@ const ProofAuditTab = () => {
                       size="sm"
                       variant="outline"
                       onClick={handleCopyQRData}
-                      className="h-6 px-2 text-xs border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10"
+                      className="h-6 px-2 text-xs border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10 glow-on-hover button-glow"
                     >
                       Copy Data
                     </Button>
@@ -532,7 +546,7 @@ const ProofAuditTab = () => {
                       size="sm"
                       variant="outline"
                       onClick={handleDownloadQRCode}
-                      className="h-6 px-2 text-xs border-green-400/50 text-green-400 hover:bg-green-400/10"
+                      className="h-6 px-2 text-xs border-green-400/50 text-green-400 hover:bg-green-400/10 glow-on-hover button-glow"
                     >
                       Download QR
                     </Button>
@@ -553,17 +567,17 @@ const ProofAuditTab = () => {
               <Button
                 onClick={handleVerifyOnBlockchain}
                 variant="outline"
-                className="flex-1 border-cyan-400 text-cyan-400 hover:bg-cyan-400/10"
+                className="flex-1 border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 glow-on-hover button-glow"
               >
-                <Shield className="h-4 w-4 mr-2" />
+                <Shield className="h-4 w-4 mr-2 icon-glow" />
                 Verify on Blockchain
               </Button>
               <Button
                 onClick={handleExportAuditPDF}
                 variant="outline"
-                className="flex-1 border-cyan-400 text-cyan-400 hover:bg-cyan-400/10"
+                className="flex-1 border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 glow-on-hover button-glow"
               >
-                <Download className="h-4 w-4 mr-2" />
+                <Download className="h-4 w-4 mr-2 icon-glow" />
                 Export Audit PDF
               </Button>
             </div>
@@ -572,11 +586,11 @@ const ProofAuditTab = () => {
             <div className="pt-4 border-t border-slate-700">
               <button
                 onClick={handleExportAllProofs}
-                className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors"
+                className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors glow-on-hover"
               >
-                <FileText className="h-4 w-4" />
-                <span>Export All Proofs</span>
-                <ArrowRight className="h-4 w-4" />
+                <FileText className="h-4 w-4 icon-glow" />
+                <span className="text-glow">Export All Proofs</span>
+                <ArrowRight className="h-4 w-4 icon-glow" />
                 <span className="text-slate-300">Accounting Dashboard</span>
               </button>
             </div>

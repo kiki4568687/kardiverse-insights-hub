@@ -208,24 +208,24 @@ const AIInsightsTab = () => {
   };
 
   return (
-    <div className="p-6 space-y-6 bg-gray-900 text-white min-h-screen">
+    <div className="p-6 space-y-6 min-h-screen bg-card">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Tab 7 - AI Insights & ROI Forecast</h1>
+          <h1 className="text-3xl font-bold text-foreground neon-text">Tab 7 - AI Insights & ROI Forecast</h1>
           <div className="flex items-center gap-4 mt-2">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-              <span className="text-sm text-gray-400">Predictive Engine Online</span>
+              <div className="w-2 h-2 bg-green-400 rounded-full icon-glow"></div>
+              <span className="text-sm text-gray-400 text-glow">Predictive Engine Online</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-400">Data source verified by NOC</span>
+              <span className="text-sm text-gray-400 text-glow">Data source verified by NOC</span>
             </div>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-          <span className="text-sm text-gray-400">Forecast Updated Hourly</span>
+          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse icon-glow"></div>
+          <span className="text-sm text-gray-400 text-glow">Forecast Updated Hourly</span>
         </div>
       </div>
 
@@ -233,9 +233,9 @@ const AIInsightsTab = () => {
         {/* Left Column - AI Forecast Table */}
         <div className="lg:col-span-2 space-y-6">
           {/* AI Forecast Table */}
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="bg-card border-border card-glow border border-cyan-400/20">
             <CardHeader>
-              <CardTitle className="text-xl text-white">AI Forecast</CardTitle>
+              <CardTitle className="text-xl text-white neon-text">AI Forecast</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto">
@@ -252,11 +252,11 @@ const AIInsightsTab = () => {
                   </TableHeader>
                   <TableBody>
                     {forecastData.map((item, index) => (
-                      <TableRow key={index} className="border-gray-700 hover:bg-gray-700/50">
-                        <TableCell className="text-white font-medium">{item.metric}</TableCell>
-                        <TableCell className="text-white">{item.current}</TableCell>
-                        <TableCell className="text-green-400">{item.predicted}</TableCell>
-                        <TableCell className="text-white">{item.confidence}</TableCell>
+                      <TableRow key={index} className="border-gray-700 hover:bg-gray-700/50 glow-on-hover">
+                        <TableCell className="text-white font-medium text-glow">{item.metric}</TableCell>
+                        <TableCell className="text-white text-glow">{item.current}</TableCell>
+                        <TableCell className="text-green-400 text-glow">{item.predicted}</TableCell>
+                        <TableCell className="text-white text-glow">{item.confidence}</TableCell>
                         <TableCell>{getTrendIcon(item.trend)}</TableCell>
                         <TableCell>{getAlertIcon(item.alert)}</TableCell>
                       </TableRow>
@@ -268,13 +268,13 @@ const AIInsightsTab = () => {
           </Card>
 
           {/* ROI Growth Trend */}
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="bg-card border-border card-glow border border-blue-400/20">
             <CardHeader>
-              <CardTitle className="text-xl text-white">ROI Growth Trend</CardTitle>
+              <CardTitle className="text-xl text-white neon-text">ROI Growth Trend</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="h-64 flex items-center justify-center">
-                <svg className="w-full h-full" viewBox="0 0 400 200">
+                <svg className="w-full h-full" viewBox="0 0 400 200" style={{ filter: 'drop-shadow(0 0 8px rgba(0, 255, 255, 0.5))' }}>
                   {/* Grid lines */}
                   <defs>
                     <pattern id="grid-roi" width="40" height="40" patternUnits="userSpaceOnUse">
@@ -315,16 +315,16 @@ const AIInsightsTab = () => {
               </div>
               <div className="flex items-center justify-center gap-6 mt-4">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                  <span className="text-sm text-white">Stable</span>
+                  <div className="w-3 h-3 bg-green-400 rounded-full icon-glow"></div>
+                  <span className="text-sm text-white text-glow">Stable</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                  <span className="text-sm text-white">Fluctuating</span>
+                  <div className="w-3 h-3 bg-yellow-400 rounded-full icon-glow"></div>
+                  <span className="text-sm text-white text-glow">Fluctuating</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                  <span className="text-sm text-white">Alert</span>
+                  <div className="w-3 h-3 bg-red-400 rounded-full icon-glow"></div>
+                  <span className="text-sm text-white text-glow">Alert</span>
                 </div>
               </div>
             </CardContent>
@@ -334,23 +334,23 @@ const AIInsightsTab = () => {
         {/* Right Column - AI Insight & Smart Alerts */}
         <div className="space-y-6">
           {/* AI Insight */}
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="bg-card border-border card-glow border border-purple-400/20">
             <CardHeader>
-              <CardTitle className="text-xl text-white">AI Insight</CardTitle>
+              <CardTitle className="text-xl text-white neon-text">AI Insight</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-gray-300 text-sm leading-relaxed">
+              <p className="text-gray-300 text-sm leading-relaxed text-glow">
                 {aiInsight}
               </p>
               {buttonStates.simulation && (
                 <div className="mt-4">
                   <div className="flex items-center justify-between text-xs text-gray-400 mb-2">
-                    <span>Simulation Progress</span>
-                    <span>{simulationProgress}%</span>
+                    <span className="text-glow">Simulation Progress</span>
+                    <span className="text-glow">{simulationProgress}%</span>
                   </div>
                   <div className="w-full bg-gray-700 rounded-full h-2">
                     <div 
-                      className="bg-blue-400 h-2 rounded-full transition-all duration-300"
+                      className="bg-blue-400 h-2 rounded-full transition-all duration-300 card-glow glow-on-hover"
                       style={{ width: `${simulationProgress}%` }}
                     ></div>
                   </div>
@@ -360,11 +360,11 @@ const AIInsightsTab = () => {
           </Card>
 
           {/* AI Confidence Gauge */}
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="bg-card border-border card-glow border border-green-400/20">
             <CardContent className="p-6">
               <div className="flex flex-col items-center">
                 <div className="relative w-32 h-32 mb-4">
-                  <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                  <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100" style={{ filter: 'drop-shadow(0 0 8px rgba(0, 255, 255, 0.5))' }}>
                     <circle
                       cx="50"
                       cy="50"
@@ -388,45 +388,45 @@ const AIInsightsTab = () => {
                     />
                   </svg>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-2xl font-bold text-white">{aiConfidence}%</span>
+                    <span className="text-2xl font-bold text-white neon-text">{aiConfidence}%</span>
                   </div>
                 </div>
-                <span className="text-sm text-gray-400 uppercase tracking-wider">AI CONFIDENCE</span>
+                <span className="text-sm text-gray-400 uppercase tracking-wider text-glow">AI CONFIDENCE</span>
               </div>
             </CardContent>
           </Card>
 
           {/* Smart Alerts */}
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="bg-card border-border card-glow border border-orange-400/20">
             <CardHeader>
-              <CardTitle className="text-xl text-white">Smart Alerts</CardTitle>
+              <CardTitle className="text-xl text-white neon-text">Smart Alerts</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               <Button
                 variant="outline"
                 onClick={handleRunSimulation}
                 disabled={buttonStates.simulation}
-                className="w-full justify-start bg-transparent hover:bg-gray-700 text-white border-gray-600 disabled:opacity-50"
+                className="w-full justify-start bg-transparent hover:bg-gray-700 text-white border-gray-600 disabled:opacity-50 button-glow glow-on-hover"
               >
-                <Zap className={`h-4 w-4 mr-2 text-blue-400 ${buttonStates.simulation ? 'animate-spin' : ''}`} />
+                <Zap className={`h-4 w-4 mr-2 text-blue-400 icon-glow ${buttonStates.simulation ? 'animate-spin' : ''}`} />
                 {buttonStates.simulation ? 'Running Simulation...' : 'Run AI Simulation'}
               </Button>
               <Button
                 variant="outline"
                 onClick={handleExportForecastPDF}
                 disabled={buttonStates.export}
-                className="w-full justify-start bg-transparent hover:bg-gray-700 text-white border-gray-600 disabled:opacity-50"
+                className="w-full justify-start bg-transparent hover:bg-gray-700 text-white border-gray-600 disabled:opacity-50 button-glow glow-on-hover"
               >
-                <FileText className={`h-4 w-4 mr-2 text-blue-400 ${buttonStates.export ? 'animate-pulse' : ''}`} />
+                <FileText className={`h-4 w-4 mr-2 text-blue-400 icon-glow ${buttonStates.export ? 'animate-pulse' : ''}`} />
                 {buttonStates.export ? 'Exporting PDF...' : 'Export Forecast PDF'}
               </Button>
               <Button
                 variant="outline"
                 onClick={handleGenerateROIReport}
                 disabled={buttonStates.report}
-                className="w-full justify-start bg-transparent hover:bg-gray-700 text-white border-gray-600 disabled:opacity-50"
+                className="w-full justify-start bg-transparent hover:bg-gray-700 text-white border-gray-600 disabled:opacity-50 button-glow glow-on-hover"
               >
-                <BarChart3 className={`h-4 w-4 mr-2 text-blue-400 ${buttonStates.report ? 'animate-pulse' : ''}`} />
+                <BarChart3 className={`h-4 w-4 mr-2 text-blue-400 icon-glow ${buttonStates.report ? 'animate-pulse' : ''}`} />
                 {buttonStates.report ? 'Generating Report...' : 'Generate ROI Report'}
               </Button>
             </CardContent>
@@ -435,13 +435,13 @@ const AIInsightsTab = () => {
       </div>
 
       {/* Top Performing Sponsors */}
-      <Card className="bg-gray-800 border-gray-700">
+      <Card className="bg-card border-border card-glow border border-cyan-400/20">
         <CardHeader>
-          <CardTitle className="text-xl text-white">Top Performing Sponsors</CardTitle>
+          <CardTitle className="text-xl text-white neon-text">Top Performing Sponsors</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="h-64 flex items-center justify-center">
-            <svg className="w-full h-full" viewBox="0 0 400 200">
+            <svg className="w-full h-full" viewBox="0 0 400 200" style={{ filter: 'drop-shadow(0 0 8px rgba(0, 255, 255, 0.3))' }}>
               {/* Bar chart */}
               {[
                 { x: 40, height: 130, label: "Safaricom", revenue: "€1.24M", rank: 1 },
@@ -517,8 +517,8 @@ const AIInsightsTab = () => {
       {/* Footer Status */}
       <div className="flex items-center justify-end">
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-          <span className="text-sm text-gray-400">Forecast Updated Hourly</span>
+          <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse icon-glow"></div>
+          <span className="text-sm text-gray-400 text-glow">Forecast Updated Hourly</span>
         </div>
       </div>
     </div>

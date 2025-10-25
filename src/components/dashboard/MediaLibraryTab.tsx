@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { 
   Upload, 
   Download, 
@@ -17,7 +18,8 @@ import {
   Eye,
   ExternalLink,
   Shield,
-  Activity
+  Activity,
+  X
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import jsPDF from 'jspdf';
@@ -76,6 +78,8 @@ const MediaLibraryTab = () => {
   const [isLive, setIsLive] = useState(true);
   const [lastUpdate, setLastUpdate] = useState(new Date());
   const [playingVideo, setPlayingVideo] = useState<string | null>(null);
+  const [selectedMedia, setSelectedMedia] = useState<string | null>(null);
+  const [showMediaDialog, setShowMediaDialog] = useState(false);
   const [videoUrls, setVideoUrls] = useState<{[key: string]: string}>({
     "DroneShow": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     "Billboard": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
@@ -193,6 +197,11 @@ const MediaLibraryTab = () => {
     };
     
     input.click();
+  };
+
+  const handleMediaClick = (mediaType: string) => {
+    setSelectedMedia(mediaType);
+    setShowMediaDialog(true);
   };
 
   const handleExportMetadata = async () => {
@@ -455,17 +464,17 @@ const MediaLibraryTab = () => {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500 bg-gradient-to-br from-slate-900 to-slate-800 min-h-screen p-6">
+    <div className="space-y-6 animate-in fade-in duration-500 min-h-screen p-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Tab 8 - Media & Proof Library</h1>
+          <h1 className="text-3xl font-bold text-white neon-text">Tab 8 - Media & Proof Library</h1>
           <div className="flex items-center gap-4 mt-2">
             <div className="flex items-center gap-2">
-              <ChevronDown className="h-4 w-4 text-cyan-400" />
-              <span className="text-sm text-cyan-400">Library Synced</span>
+              <ChevronDown className="h-4 w-4 text-cyan-400 icon-glow" />
+              <span className="text-sm text-cyan-400 text-glow">Library Synced</span>
             </div>
-            <span className="text-sm text-slate-400">24 Active Campaigns</span>
+            <span className="text-sm text-slate-400 text-glow">24 Active Campaigns</span>
           </div>
         </div>
       </div>
@@ -474,9 +483,9 @@ const MediaLibraryTab = () => {
         {/* Left Column - Media Folders & Tags */}
         <div className="lg:col-span-2 space-y-6">
           {/* Media Folders & Tags Table */}
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-card border-border card-glow border border-cyan-400/20">
             <CardHeader>
-              <CardTitle className="text-xl text-white">Media Folders & Tags</CardTitle>
+              <CardTitle className="text-xl text-white neon-text">Media Folders & Tags</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto">
@@ -493,23 +502,23 @@ const MediaLibraryTab = () => {
                   </TableHeader>
                   <TableBody>
                     {mediaFolders.map((folder, index) => (
-                      <TableRow key={index} className="border-slate-700 hover:bg-slate-700/50">
+                      <TableRow key={index} className="border-slate-700 hover:bg-slate-700/50 glow-on-hover">
                         <TableCell>
                           <div className="flex items-center gap-3">
                             {getSystemIcon(folder.icon)}
-                            <span className="text-white font-medium">{folder.system}</span>
+                            <span className="text-white font-medium text-glow">{folder.system}</span>
                           </div>
                         </TableCell>
                         <TableCell className="text-white">{folder.type || '-'}</TableCell>
                         <TableCell className="text-white">{folder.files || '-'}</TableCell>
                         <TableCell className="text-white">{folder.updated}</TableCell>
                         <TableCell>
-                          <span className={`font-medium ${getIntegrityColor(folder.integrity)}`}>
+                          <span className={`font-medium text-glow ${getIntegrityColor(folder.integrity)}`}>
                             {folder.integrity}
                           </span>
                         </TableCell>
                         <TableCell>
-                          <ChevronDown className="h-4 w-4 text-slate-400 cursor-pointer hover:text-white" />
+                          <ChevronDown className="h-4 w-4 text-slate-400 cursor-pointer hover:text-white icon-glow" />
                         </TableCell>
                       </TableRow>
                     ))}
@@ -520,59 +529,68 @@ const MediaLibraryTab = () => {
           </Card>
 
           {/* Media Previews */}
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-card border-border card-glow border border-purple-400/20">
             <CardHeader>
-              <CardTitle className="text-xl text-white">Media Previews</CardTitle>
+              <CardTitle className="text-xl text-white neon-text">Media Previews</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-3 gap-4">
                 {/* Media A */}
-                <div className="text-center">
-                  <div className="w-24 h-24 bg-slate-700 rounded-lg flex items-center justify-center mb-2 relative overflow-hidden">
-                    <Play className="h-8 w-8 text-cyan-400" />
+                <div className="flex flex-col items-center">
+                  <div 
+                    className="w-24 h-24 bg-slate-700 rounded-lg flex items-center justify-center mb-2 relative overflow-hidden media-card-glow cursor-pointer hover:scale-105 transition-transform"
+                    onClick={() => handleMediaClick('Media A')}
+                  >
+                    <Play className="h-8 w-8 text-cyan-400 icon-glow relative z-10" />
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg"></div>
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="w-16 h-16 rounded-full bg-cyan-400/30 animate-pulse"></div>
                     </div>
                   </div>
-                  <span className="text-sm text-white">Media A</span>
+                  <span className="text-sm text-white text-glow text-center">Media A</span>
                 </div>
 
                 {/* Media B */}
-                <div className="text-center">
-                  <div className="w-24 h-24 bg-slate-700 rounded-lg flex items-center justify-center mb-2 relative overflow-hidden">
-                    <QrCode className="h-8 w-8 text-white" />
+                <div className="flex flex-col items-center">
+                  <div 
+                    className="w-24 h-24 bg-slate-700 rounded-lg flex items-center justify-center mb-2 relative overflow-hidden media-card-glow cursor-pointer hover:scale-105 transition-transform"
+                    onClick={() => handleMediaClick('Media B')}
+                  >
+                    <QrCode className="h-8 w-8 text-white icon-glow relative z-10" />
                     <div className="absolute inset-0 bg-gradient-to-br from-green-500/20 to-blue-500/20 rounded-lg"></div>
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="w-16 h-16 bg-white/10 rounded-lg"></div>
                     </div>
                   </div>
-                  <span className="text-sm text-white">Media B</span>
+                  <span className="text-sm text-white text-glow text-center">Media B</span>
                 </div>
 
                 {/* Media C */}
-                <div className="text-center">
-                  <div className="w-24 h-24 bg-slate-700 rounded-lg flex items-center justify-center mb-2 relative overflow-hidden">
-                    <span className="text-2xl font-bold text-white">0991</span>
+                <div className="flex flex-col items-center">
+                  <div 
+                    className="w-24 h-24 bg-slate-700 rounded-lg flex items-center justify-center mb-2 relative overflow-hidden media-card-glow cursor-pointer hover:scale-105 transition-transform"
+                    onClick={() => handleMediaClick('Media C')}
+                  >
+                    <span className="text-2xl font-bold text-white text-glow relative z-10">0991</span>
                     <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg"></div>
                   </div>
-                  <span className="text-sm text-white">Media C</span>
+                  <span className="text-sm text-white text-glow text-center">Media C</span>
                 </div>
               </div>
 
               {/* AI Media Inspector Legend */}
               <div className="mt-6 flex items-center justify-center gap-6">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-teal-400 rounded-full"></div>
-                  <span className="text-sm text-white">Verified</span>
+                  <div className="w-3 h-3 bg-teal-400 rounded-full icon-glow"></div>
+                  <span className="text-sm text-white text-glow">Verified</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-orange-400 rounded-full"></div>
-                  <span className="text-sm text-white">Pending</span>
+                  <div className="w-3 h-3 bg-orange-400 rounded-full icon-glow"></div>
+                  <span className="text-sm text-white text-glow">Pending</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                  <span className="text-sm text-white">Error</span>
+                  <div className="w-3 h-3 bg-red-400 rounded-full icon-glow"></div>
+                  <span className="text-sm text-white text-glow">Error</span>
                 </div>
               </div>
             </CardContent>
@@ -582,11 +600,11 @@ const MediaLibraryTab = () => {
         {/* Right Column - AI Media Inspector */}
         <div className="space-y-6">
           {/* Integrity Gauge */}
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-card border-border card-glow border border-green-400/20">
             <CardContent className="p-6">
               <div className="flex flex-col items-center">
                 <div className="relative w-32 h-32 mb-4">
-                  <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                  <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100" style={{ filter: 'drop-shadow(0 0 8px rgba(0, 255, 255, 0.5))' }}>
                     {/* Background circle */}
                     <circle
                       cx="50"
@@ -611,49 +629,49 @@ const MediaLibraryTab = () => {
                     />
                   </svg>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-2xl font-bold text-white">{integrityScore}%</span>
+                    <span className="text-2xl font-bold text-white neon-text">{integrityScore}%</span>
                   </div>
                 </div>
-                <span className="text-sm text-white uppercase tracking-wide">Integrity</span>
+                <span className="text-sm text-white uppercase tracking-wide text-glow">Integrity</span>
               </div>
             </CardContent>
           </Card>
 
           {/* Status Text */}
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-card border-border card-glow border border-blue-400/20">
             <CardContent className="p-4">
               <div className="space-y-2 text-center">
-                <p className="text-sm text-slate-300">All media verified against</p>
-                <p className="text-sm text-cyan-400 font-medium">ProofHashes</p>
-                <p className="text-sm text-green-400">No tampering detected</p>
+                <p className="text-sm text-slate-300 text-glow">All media verified against</p>
+                <p className="text-sm text-cyan-400 font-medium neon-text">ProofHashes</p>
+                <p className="text-sm text-green-400 text-glow">No tampering detected</p>
               </div>
             </CardContent>
           </Card>
 
           {/* Action Buttons */}
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-card border-border card-glow border border-orange-400/20">
             <CardContent className="space-y-3">
               <Button
                 onClick={handleUploadNewProof}
-                className="w-full bg-cyan-600 hover:bg-cyan-700 text-white"
+                className="w-full bg-cyan-600 hover:bg-cyan-700 text-white button-glow glow-on-hover"
               >
-                <Upload className="h-4 w-4 mr-2" />
+                <Upload className="h-4 w-4 mr-2 icon-glow" />
                 Upload New Proof
               </Button>
               <Button
                 variant="outline"
                 onClick={handleExportMetadata}
-                className="w-full border-cyan-400 text-cyan-400 hover:bg-cyan-400/10"
+                className="w-full border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 button-glow glow-on-hover"
               >
-                <Download className="h-4 w-4 mr-2" />
+                <Download className="h-4 w-4 mr-2 icon-glow" />
                 Export Metadata
               </Button>
               <Button
                 variant="outline"
                 onClick={handleOpenInPlayer}
-                className="w-full border-cyan-400 text-cyan-400 hover:bg-cyan-400/10"
+                className="w-full border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 button-glow glow-on-hover"
               >
-                <Play className="h-4 w-4 mr-2" />
+                <Play className="h-4 w-4 mr-2 icon-glow" />
                 Open in Player
               </Button>
             </CardContent>
@@ -663,15 +681,69 @@ const MediaLibraryTab = () => {
           <div className="text-center">
             <button
               onClick={handleExportAllProofs}
-              className="text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-2 mx-auto"
+              className="text-cyan-400 hover:text-cyan-300 transition-colors flex items-center gap-2 mx-auto glow-on-hover"
             >
-              <span>Export All Proofs</span>
-              <ExternalLink className="h-4 w-4" />
-              <span>→ Audit Monitor (Tab 4)</span>
+              <span className="text-glow">Export All Proofs</span>
+              <ExternalLink className="h-4 w-4 icon-glow" />
+              <span className="text-glow">→ Audit Monitor (Tab 4)</span>
             </button>
           </div>
         </div>
       </div>
+
+      {/* Media Preview Dialog */}
+      <Dialog open={showMediaDialog} onOpenChange={setShowMediaDialog}>
+        <DialogContent className="sm:max-w-2xl bg-card border-border card-glow">
+          <DialogHeader>
+            <div className="flex items-center justify-between">
+              <DialogTitle className="text-xl neon-text">Media Preview: {selectedMedia}</DialogTitle>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowMediaDialog(false)}
+                className="hover:bg-muted"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          </DialogHeader>
+          <div className="mt-4">
+            {selectedMedia === 'Media A' && (
+              <div className="space-y-4">
+                <div className="aspect-video bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg flex items-center justify-center">
+                  <Play className="h-16 w-16 text-cyan-400 icon-glow cursor-pointer" />
+                </div>
+                <div className="text-center space-y-2">
+                  <p className="text-sm text-muted-foreground">Video Content</p>
+                  <p className="text-xs text-muted-foreground">Duration: 2m 34s | Resolution: 1080p</p>
+                </div>
+              </div>
+            )}
+            {selectedMedia === 'Media B' && (
+              <div className="space-y-4">
+                <div className="aspect-square bg-gradient-to-br from-green-500/20 to-blue-500/20 rounded-lg flex items-center justify-center">
+                  <QrCode className="h-32 w-32 text-white icon-glow" />
+                </div>
+                <div className="text-center space-y-2">
+                  <p className="text-sm text-muted-foreground">QR Code Preview</p>
+                  <p className="text-xs text-muted-foreground">Size: 512x512 | Format: SVG</p>
+                </div>
+              </div>
+            )}
+            {selectedMedia === 'Media C' && (
+              <div className="space-y-4">
+                <div className="aspect-square bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-lg flex items-center justify-center">
+                  <span className="text-6xl font-bold text-white text-glow">0991</span>
+                </div>
+                <div className="text-center space-y-2">
+                  <p className="text-sm text-muted-foreground">Media ID: 0991</p>
+                  <p className="text-xs text-muted-foreground">Status: Active | Type: Image Asset</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

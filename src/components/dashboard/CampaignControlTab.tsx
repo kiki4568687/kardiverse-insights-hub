@@ -72,8 +72,24 @@ const CampaignControlTab = () => {
   });
 
   const [versions, setVersions] = useState([
-    { id: "hae27b1f...", name: "Version 1.2" },
-    { id: "a402691...", name: "Version 1.1" }
+    { 
+      id: "hae27b1f...", 
+      name: "Version 1.2",
+      integrity: 98,
+      createdAt: "2024-03-15",
+      blockchainHash: "0x5a8f2b1...",
+      notaryVerified: true,
+      impressions: 45600
+    },
+    { 
+      id: "a402691...", 
+      name: "Version 1.1",
+      integrity: 94,
+      createdAt: "2024-03-10",
+      blockchainHash: "0x3d9e8a1...",
+      notaryVerified: true,
+      impressions: 38420
+    }
   ]);
 
   const getStatusColor = (status: string) => {
@@ -334,6 +350,16 @@ ET`;
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
   const [isExporting, setIsExporting] = useState(false);
+  const [selectedVersion, setSelectedVersion] = useState<string | null>(null);
+  
+  const handleVersionSelect = (versionId: string) => {
+    if (selectedVersion === versionId) {
+      // If clicking the same version, close the modal
+      setSelectedVersion(null);
+    } else {
+      setSelectedVersion(versionId);
+    }
+  };
 
   const handleEnterNow = async () => {
     setShowPhoneDialog(true);
@@ -404,18 +430,31 @@ ET`;
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-500 bg-gradient-to-br from-slate-900 to-slate-800 min-h-screen p-6">
+    <div className="space-y-6 animate-in fade-in duration-500 min-h-screen p-3 sm:p-6 overflow-x-hidden">
       {/* Header */}
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-white">Campaign Control Center</h1>
-          <p className="text-lg text-slate-300">AI</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-white neon-text">Campaign Control Center</h1>
+          <p className="text-base sm:text-lg text-slate-300">AI</p>
             </div>
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
-            <div className="w-6 h-6 bg-white rounded-sm"></div>
+          <div 
+            className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center"
+            style={{
+              boxShadow: '0 0 8px rgba(59, 130, 246, 0.6), 0 0 16px rgba(139, 92, 246, 0.5), 0 0 24px rgba(59, 130, 246, 0.3)'
+            }}
+          >
+            <span className="text-white font-bold text-base">K</span>
           </div>
-          <span className="text-white font-semibold">Kardiverse</span>
+          <span 
+            className="font-bold text-base sm:text-lg neon-text"
+            style={{
+              color: 'hsl(195, 100%, 50%)',
+              textShadow: '0 0 3px hsl(195, 100%, 60%), 0 0 6px hsl(195, 100%, 60%)'
+            }}
+          >
+            KARDIVERSE
+          </span>
         </div>
       </div>
 
@@ -423,76 +462,78 @@ ET`;
         {/* Left Column */}
         <div className="space-y-6">
           {/* Campaigns Section */}
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-card border-border card-glow border border-cyan-400/20">
           <CardHeader>
-              <CardTitle className="text-xl text-white">Campaigns</CardTitle>
+              <CardTitle className="text-xl text-white neon-text">Campaigns</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow className="border-slate-700">
-                      <TableHead className="text-slate-300">Campaign</TableHead>
-                      <TableHead className="text-slate-300">Status</TableHead>
-                      <TableHead className="text-slate-300">Location</TableHead>
-                      <TableHead className="text-slate-300">Start</TableHead>
-                      <TableHead className="text-slate-300">Impressions</TableHead>
-                      <TableHead className="text-slate-300">CTR</TableHead>
-                      <TableHead className="text-slate-300">Version</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {campaigns.map((campaign) => (
-                      <TableRow 
-                        key={campaign.id} 
-                        className={`border-slate-700 hover:bg-slate-700/50 cursor-pointer ${
-                          selectedCampaign.id === campaign.id ? 'bg-slate-700/30' : ''
-                        }`}
-                        onClick={() => handleCampaignSelect(campaign)}
-                      >
-                        <TableCell className="text-white font-medium">{campaign.name}</TableCell>
-                        <TableCell>
-                          <Badge className={`${getStatusColor(campaign.status)} text-white`}>
-                            {campaign.status}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-white">{campaign.location}</TableCell>
-                        <TableCell className="text-white">{campaign.start}</TableCell>
-                        <TableCell className="text-white">{campaign.impressions}</TableCell>
-                        <TableCell className="text-white">{campaign.ctr}</TableCell>
-                        <TableCell className="text-white">{campaign.version}</TableCell>
+              <div className="overflow-x-auto -mx-1 px-1">
+                <div className="inline-block min-w-full align-middle">
+                  <Table className="w-full">
+                    <TableHeader>
+                      <TableRow className="border-slate-700">
+                        <TableHead className="text-slate-300 text-[11px] px-2 py-2">Campaign</TableHead>
+                        <TableHead className="text-slate-300 text-[11px] px-2 py-2 w-20">Status</TableHead>
+                        <TableHead className="text-slate-300 text-[11px] px-2 py-2">Location</TableHead>
+                        <TableHead className="text-slate-300 text-[11px] px-2 py-2 w-20">Start</TableHead>
+                        <TableHead className="text-slate-300 text-[11px] px-2 py-2 w-24">Impr.</TableHead>
+                        <TableHead className="text-slate-300 text-[11px] px-2 py-2 w-16">CTR</TableHead>
+                        <TableHead className="text-slate-300 text-[11px] px-2 py-2 w-16">Ver.</TableHead>
                       </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+                    </TableHeader>
+                    <TableBody>
+                      {campaigns.map((campaign) => (
+                        <TableRow 
+                          key={campaign.id} 
+                          className={`border-slate-700 hover:bg-slate-700/50 cursor-pointer transition-all duration-200 glow-on-hover ${
+                            selectedCampaign.id === campaign.id ? 'bg-slate-700/30 border-2 border-green-400/50 card-glow' : ''
+                          }`}
+                          onClick={() => handleCampaignSelect(campaign)}
+                        >
+                          <TableCell className="text-white font-medium text-xs px-2 py-2 max-w-[150px] truncate text-glow">{campaign.name}</TableCell>
+                          <TableCell className="px-2 py-2">
+                            <Badge className={`${getStatusColor(campaign.status)} text-white text-[10px] px-1.5 py-0.5 glow-on-hover`}>
+                              {campaign.status}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="text-white text-xs px-2 py-2 max-w-[100px] truncate">{campaign.location}</TableCell>
+                          <TableCell className="text-white text-xs px-2 py-2 whitespace-nowrap">{campaign.start}</TableCell>
+                          <TableCell className="text-white text-xs px-2 py-2 whitespace-nowrap">{campaign.impressions}</TableCell>
+                          <TableCell className="text-white text-xs px-2 py-2">{campaign.ctr}</TableCell>
+                          <TableCell className="text-white text-xs px-2 py-2">{campaign.version}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
               </div>
               
               {/* Legend */}
               <div className="mt-4 flex items-center gap-4 text-sm">
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-cyan-400 rounded-full"></div>
-                  <span className="text-slate-300">Active</span>
+                  <div className="w-2 h-2 bg-cyan-400 rounded-full icon-glow"></div>
+                  <span className="text-slate-300 text-glow">Active</span>
               </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                  <span className="text-slate-300">Paused</span>
+                  <div className="w-2 h-2 bg-yellow-500 rounded-full icon-glow"></div>
+                  <span className="text-slate-300 text-glow">Paused</span>
             </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-cyan-500 rounded-full"></div>
-                  <span className="text-slate-300">Draft</span>
+                  <div className="w-2 h-2 bg-cyan-500 rounded-full icon-glow"></div>
+                  <span className="text-slate-300 text-glow">Draft</span>
               </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-gray-500 rounded-full"></div>
-                  <span className="text-slate-300">Ended</span>
+                  <div className="w-2 h-2 bg-gray-500 rounded-full icon-glow"></div>
+                  <span className="text-slate-300 text-glow">Ended</span>
             </div>
               </div>
           </CardContent>
         </Card>
 
           {/* Live Preview Section */}
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-card border-border card-glow border border-blue-400/20">
           <CardHeader>
-              <CardTitle className="text-xl text-white">Live Preview</CardTitle>
+              <CardTitle className="text-xl text-white neon-text">Live Preview</CardTitle>
           </CardHeader>
             <CardContent>
               <div className="flex justify-center">
@@ -505,7 +546,7 @@ ET`;
                         <p className="text-blue-100 text-xs">Scan to win a free trip to a surprise destination!</p>
               </div>
                       <Button 
-                        className={`text-xs py-2 font-semibold transition-all duration-200 ${
+                        className={`text-xs py-2 font-semibold transition-all duration-200 button-glow glow-on-hover ${
                           enteringCampaign === "preview" 
                             ? "bg-blue-200 text-blue-700 animate-pulse" 
                             : "bg-white hover:bg-cyan-50 text-cyan-600"
@@ -528,7 +569,7 @@ ET`;
                     <button
                       key={status}
                       onClick={() => handleStatusClick(status)}
-                      className={`px-3 py-1 rounded-full transition-all duration-200 hover:scale-105 ${
+                      className={`px-3 py-1 rounded-full transition-all duration-200 hover:scale-105 glow-on-hover ${
                         selectedStatus === status
                           ? `bg-${info.color}-500/20 border border-${info.color}-500/50 text-${info.color}-400`
                           : "text-slate-300 hover:text-white hover:bg-slate-700/50"
@@ -544,9 +585,9 @@ ET`;
               {/* Entry Status */}
               {enteringCampaign && (
                 <div className="mt-3 flex items-center justify-center">
-                  <div className="flex items-center gap-2 px-3 py-1 bg-cyan-400/20 border border-blue-500/30 rounded-full">
-                    <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
-                    <span className="text-cyan-400 text-sm font-medium">
+                  <div className="flex items-center gap-2 px-3 py-1 bg-cyan-400/20 border border-blue-500/30 rounded-full card-glow glow-on-hover">
+                    <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse icon-glow"></div>
+                    <span className="text-cyan-400 text-sm font-medium text-glow">
                       Entering {selectedCampaign.name}...
                     </span>
                   </div>
@@ -555,21 +596,21 @@ ET`;
               
               {/* Status Details Panel */}
               {showStatusDetails && selectedStatus && (
-                <div className="mt-4 p-4 bg-slate-700/50 rounded-lg border border-slate-600">
+                <div className="mt-4 p-4 bg-slate-700/50 rounded-lg border border-slate-600 card-glow border border-cyan-400/20">
                   <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                    <h3 className="text-lg font-semibold text-white flex items-center gap-2 neon-text">
                       <span>{getStatusInfo(selectedStatus).icon}</span>
                       {selectedStatus} Campaigns
                     </h3>
                     <button
                       onClick={() => setShowStatusDetails(false)}
-                      className="text-slate-400 hover:text-white"
+                      className="text-slate-400 hover:text-white glow-on-hover"
                     >
                       ✕
                     </button>
                   </div>
                   
-                  <p className="text-slate-300 text-sm mb-4">
+                  <p className="text-slate-300 text-sm mb-4 text-glow">
                     {getStatusInfo(selectedStatus).description}
                   </p>
                   
@@ -579,20 +620,20 @@ ET`;
                       .map((campaign) => (
                         <div
                           key={campaign.id}
-                          className={`p-3 rounded-lg cursor-pointer transition-colors ${
+                          className={`p-3 rounded-lg cursor-pointer transition-colors glow-on-hover ${
                             selectedCampaign.id === campaign.id
-                              ? 'bg-cyan-400/20 border border-blue-500/50'
+                              ? 'bg-cyan-400/20 border border-blue-500/50 card-glow'
                               : 'bg-slate-600/50 hover:bg-slate-600/70'
                           }`}
                           onClick={() => setSelectedCampaign(campaign)}
                         >
                           <div className="flex items-center justify-between">
                             <div>
-                              <h4 className="text-white font-medium">{campaign.name}</h4>
+                              <h4 className="text-white font-medium text-glow">{campaign.name}</h4>
                               <p className="text-slate-400 text-sm">{campaign.location}</p>
                             </div>
                             <div className="text-right">
-                              <p className="text-white text-sm">{campaign.impressions}</p>
+                              <p className="text-white text-sm text-glow">{campaign.impressions}</p>
                               <p className="text-slate-400 text-xs">{campaign.ctr}</p>
                 </div>
               </div>
@@ -614,9 +655,9 @@ ET`;
         {/* Right Column */}
         <div className="space-y-6">
           {/* Campaign Editor Section */}
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-card border-border card-glow border border-purple-400/20">
         <CardHeader>
-              <CardTitle className="text-xl text-white">Campaign Editor</CardTitle>
+              <CardTitle className="text-xl text-white neon-text">Campaign Editor</CardTitle>
         </CardHeader>
             <CardContent className="space-y-4">
               <div>
@@ -624,7 +665,7 @@ ET`;
                 <Input
                   value={campaignForm.name}
                   onChange={(e) => handleFormChange('name', e.target.value)}
-                  className="bg-slate-700 border-slate-600 text-white"
+                  className="bg-slate-700 border-slate-600 text-white input-glow"
                 />
             </div>
 
@@ -634,9 +675,9 @@ ET`;
                   <Input
                     value={campaignForm.location}
                     onChange={(e) => handleFormChange('location', e.target.value)}
-                    className="bg-slate-700 border-slate-600 text-white pr-8"
+                    className="bg-slate-700 border-slate-600 text-white pr-8 input-glow"
                   />
-                  <MapPin className="absolute right-2 top-2.5 h-4 w-4 text-slate-400" />
+                  <MapPin className="absolute right-2 top-2.5 h-4 w-4 text-slate-400 icon-glow" />
               </div>
             </div>
 
@@ -648,9 +689,9 @@ ET`;
                       type="date"
                       value={campaignForm.startDate}
                       onChange={(e) => handleFormChange('startDate', e.target.value)}
-                      className="bg-slate-700 border-slate-600 text-white pr-8"
+                      className="bg-slate-700 border-slate-600 text-white pr-8 input-glow"
                     />
-                    <Calendar className="absolute right-2 top-2.5 h-4 w-4 text-slate-400" />
+                    <Calendar className="absolute right-2 top-2.5 h-4 w-4 text-slate-400 icon-glow" />
                   </div>
                 </div>
                 <div>
@@ -660,9 +701,9 @@ ET`;
                       type="date"
                       value={campaignForm.endDate}
                       onChange={(e) => handleFormChange('endDate', e.target.value)}
-                      className="bg-slate-700 border-slate-600 text-white pr-8"
+                      className="bg-slate-700 border-slate-600 text-white pr-8 input-glow"
                     />
-                    <Calendar className="absolute right-2 top-2.5 h-4 w-4 text-slate-400" />
+                    <Calendar className="absolute right-2 top-2.5 h-4 w-4 text-slate-400 icon-glow" />
                   </div>
                 </div>
               </div>
@@ -672,7 +713,7 @@ ET`;
                 <Input
                   value={campaignForm.budget}
                   onChange={(e) => handleFormChange('budget', e.target.value)}
-                  className="bg-slate-700 border-slate-600 text-white"
+                  className="bg-slate-700 border-slate-600 text-white input-glow"
                 />
             </div>
 
@@ -690,9 +731,9 @@ ET`;
                   <Input
                     value={campaignForm.radius}
                     onChange={(e) => handleFormChange('radius', e.target.value)}
-                    className="bg-slate-700 border-slate-600 text-white pr-8"
+                    className="bg-slate-700 border-slate-600 text-white pr-8 input-glow"
                   />
-                  <Target className="absolute right-2 top-2.5 h-4 w-4 text-slate-400" />
+                  <Target className="absolute right-2 top-2.5 h-4 w-4 text-slate-400 icon-glow" />
             </div>
           </div>
 
@@ -707,7 +748,7 @@ ET`;
               <Button 
                 onClick={handleSaveVersion}
                 disabled={isSaving}
-                className={`w-full transition-all duration-200 ${
+                className={`w-full transition-all duration-200 button-glow glow-on-hover ${
                   isSaving 
                     ? "bg-blue-400 text-white animate-pulse" 
                     : "bg-cyan-400 hover:bg-cyan-500 text-white"
@@ -720,7 +761,7 @@ ET`;
                   </>
                 ) : (
                   <>
-                    <Save className="h-4 w-4 mr-2" />
+                    <Save className="h-4 w-4 mr-2 icon-glow" />
                     Save Version
                   </>
                 )}
@@ -740,18 +781,28 @@ ET`;
           </Card>
 
           {/* Proof & Versions Section */}
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-card border-border card-glow border border-green-400/20">
             <CardHeader>
-              <CardTitle className="text-xl text-white">Proof & Versions</CardTitle>
+              <CardTitle className="text-xl text-white neon-text">Proof & Versions</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {versions.map((version, index) => (
-                <div key={index} className="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg">
+                <div 
+                  key={index} 
+                  onClick={() => handleVersionSelect(version.id)}
+                  className={`flex items-center justify-between p-3 rounded-lg cursor-pointer transition-all duration-200 glow-on-hover card-glow ${
+                    selectedVersion === version.id
+                      ? 'bg-slate-700/70 border-2 border-green-400/50'
+                      : 'bg-slate-700/50 hover:bg-slate-700/70 border-2 border-cyan-400/20'
+                  }`}
+                >
                 <div>
-                    <div className="text-white font-medium">{version.name}</div>
+                    <div className="text-white font-medium text-glow">{version.name}</div>
                     <div className="text-slate-400 text-sm">{version.id}</div>
                   </div>
-                  <ArrowRight className="h-4 w-4 text-slate-400" />
+                  <ArrowRight className={`h-4 w-4 transition-colors icon-glow ${
+                    selectedVersion === version.id ? 'text-green-400' : 'text-slate-400'
+                  }`} />
           </div>
               ))}
               
@@ -759,7 +810,7 @@ ET`;
                 onClick={handleExportPDF}
                 disabled={isExporting}
                 variant="outline"
-                className={`w-full border-slate-600 text-slate-300 hover:bg-slate-700 transition-all duration-200 ${
+                className={`w-full border-slate-600 text-slate-300 hover:bg-slate-700 transition-all duration-200 glow-on-hover button-glow ${
                   isExporting ? "opacity-50 cursor-not-allowed" : ""
                 }`}
               >
@@ -770,20 +821,22 @@ ET`;
                   </>
                 ) : (
                   <>
-                    <Download className="h-4 w-4 mr-2" />
+                    <Download className="h-4 w-4 mr-2 icon-glow" />
                     Export PDF
                   </>
                 )}
               </Button>
         </CardContent>
       </Card>
+
+
                   </div>
                 </div>
       
       {/* Phone Number Input Dialog */}
       {showPhoneDialog && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-slate-800 rounded-lg p-6 w-96 border border-slate-600">
+          <div className="bg-card rounded-lg p-6 w-96 border border-slate-600">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-xl font-semibold text-white">Enter Phone Number</h3>
               <button
@@ -815,14 +868,14 @@ ET`;
               <div className="flex gap-3">
                 <Button
                   onClick={handlePhoneSubmit}
-                  className="flex-1 bg-cyan-400 hover:bg-cyan-500 text-white"
+                  className="flex-1 bg-cyan-400 hover:bg-cyan-500 text-white button-glow glow-on-hover"
                 >
                   Submit & Enter
                 </Button>
                 <Button
                   onClick={() => setShowPhoneDialog(false)}
                   variant="outline"
-                  className="border-slate-600 text-slate-300 hover:bg-slate-700"
+                  className="border-slate-600 text-slate-300 hover:bg-slate-700 glow-on-hover"
                 >
                   Cancel
                 </Button>
@@ -830,6 +883,129 @@ ET`;
             </div>
           </div>
           </div>
+      )}
+
+      {/* AI Integrity Analysis Modal */}
+      {selectedVersion && (
+        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-card rounded-lg p-6 w-full max-w-2xl border-2 border-cyan-400/30 card-glow animate-in fade-in zoom-in duration-300 max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-white neon-text flex items-center gap-2">
+                <CheckCircle className="h-6 w-6 text-cyan-400 icon-glow" />
+                AI Integrity Analysis
+              </h3>
+              <button
+                onClick={() => setSelectedVersion(null)}
+                className="text-slate-400 hover:text-white transition-colors text-2xl font-bold"
+              >
+                ✕
+              </button>
+            </div>
+            
+            {(() => {
+              const versionData = versions.find(v => v.id === selectedVersion);
+              if (!versionData) return null;
+              
+              return (
+                <div className="space-y-4">
+                  {/* Integrity Score */}
+                  <div className="flex items-center justify-between p-4 bg-gradient-to-br from-slate-700/50 to-slate-800/50 rounded-lg border border-cyan-400/30 glow-on-hover">
+                    <div>
+                      <div className="text-sm text-slate-400 mb-1">Blockchain Integrity</div>
+                      <div className="text-3xl font-bold text-cyan-400 text-glow">{versionData.integrity}%</div>
+                    </div>
+                    <CheckCircle className="h-12 w-12 text-green-400 icon-glow" />
+                  </div>
+
+                  {/* Metrics Grid */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-4 bg-slate-700/50 rounded-lg border border-slate-600 glow-on-hover">
+                      <div className="text-xs text-slate-400 mb-1">Audience Uplift</div>
+                      <div className="text-2xl font-bold text-green-400 text-glow">+12.5%</div>
+                    </div>
+                    <div className="p-4 bg-slate-700/50 rounded-lg border border-slate-600 glow-on-hover">
+                      <div className="text-xs text-slate-400 mb-1">Trend</div>
+                      <div className="text-2xl font-bold text-cyan-400 text-glow">↑ Improving</div>
+                    </div>
+                  </div>
+
+                  {/* Version Info */}
+                  <div className="p-4 bg-slate-700/50 rounded-lg border border-slate-600">
+                    <div className="text-sm font-medium text-white mb-3 flex items-center gap-2">
+                      <FileImage className="h-4 w-4 text-cyan-400 icon-glow" />
+                      Version Details
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-slate-400">Version Name:</span>
+                        <span className="text-white font-medium">{versionData.name}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-slate-400">Created:</span>
+                        <span className="text-white">{versionData.createdAt}</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-slate-400">Impressions:</span>
+                        <span className="text-white">{versionData.impressions.toLocaleString()}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Blockchain Details */}
+                  <div className="p-4 bg-gradient-to-br from-slate-700/50 to-slate-800/50 rounded-lg border border-cyan-400/20">
+                    <div className="text-sm font-medium text-white mb-3 flex items-center gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-400 icon-glow" />
+                      Blockchain Verification
+                    </div>
+                    <div className="space-y-3">
+                      <div>
+                        <div className="text-xs text-slate-400 mb-1">Blockchain Hash:</div>
+                        <div className="text-white font-mono text-xs bg-slate-900/50 p-2 rounded border border-slate-600">
+                          {versionData.blockchainHash}
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-slate-400">Notary Status:</span>
+                        <span className={`flex items-center gap-1 ${versionData.notaryVerified ? 'text-green-400' : 'text-red-400'}`}>
+                          {versionData.notaryVerified ? <CheckCircle className="h-4 w-4" /> : '✗'}
+                          {versionData.notaryVerified ? 'Verified' : 'Pending'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* AI Forecast */}
+                  <div className="p-4 bg-gradient-to-br from-cyan-400/10 to-blue-500/10 rounded-lg border border-cyan-400/30 glow-on-hover">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Eye className="h-5 w-5 text-cyan-400 icon-glow" />
+                      <span className="text-base font-medium text-cyan-400">AI Forecast & Insights</span>
+                    </div>
+                    <p className="text-sm text-slate-300 leading-relaxed">
+                      Based on current engagement trends and historical performance data, this version demonstrates <strong className="text-cyan-400">strong integrity metrics</strong> with an estimated ROI of <strong className="text-green-400">18.2%</strong> over the next 30 days. The blockchain verification confirms data authenticity and campaign effectiveness.
+                    </p>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-3 pt-2">
+                    <Button
+                      onClick={() => setSelectedVersion(null)}
+                      variant="outline"
+                      className="flex-1 border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10 glow-on-hover button-glow"
+                    >
+                      Close
+                    </Button>
+                    <Button
+                      onClick={handleExportPDF}
+                      className="flex-1 bg-cyan-400 hover:bg-cyan-500 text-white button-glow glow-on-hover"
+                    >
+                      Export Report
+                    </Button>
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+        </div>
       )}
     </div>
   );

@@ -13,11 +13,11 @@ const SecurityLogsTab = () => {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       {/* Header */}
-      <Card className="border-2 border-destructive/50 bg-gradient-to-br from-card to-navy shadow-lg shadow-destructive/20">
+      <Card className="border-2 border-destructive/50 bg-gradient-to-br from-card to-navy shadow-lg shadow-destructive/20 card-glow">
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle className="text-2xl flex items-center gap-2">
-              <Shield className="h-6 w-6 text-destructive" />
+            <CardTitle className="text-2xl flex items-center gap-2 neon-text">
+              <Shield className="h-6 w-6 text-destructive icon-glow" />
               Security Logs
             </CardTitle>
             <div className="flex gap-2">
@@ -31,53 +31,53 @@ const SecurityLogsTab = () => {
 
       {/* Security Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="border-border bg-card/80">
+        <Card className="border-border bg-card/80 card-glow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-muted-foreground">Total Threats Detected</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-destructive">23</div>
+            <div className="text-3xl font-bold text-destructive text-glow">23</div>
             <p className="text-xs text-muted-foreground mt-1">Last 30 days</p>
           </CardContent>
         </Card>
 
-        <Card className="border-border bg-card/80">
+        <Card className="border-border bg-card/80 card-glow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-muted-foreground">Blocked Attacks</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-success">18</div>
+            <div className="text-3xl font-bold text-success text-glow">18</div>
             <p className="text-xs text-success mt-1">Auto-blocked</p>
           </CardContent>
         </Card>
 
-        <Card className="border-border bg-card/80">
+        <Card className="border-border bg-card/80 card-glow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-muted-foreground">Active Threats</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-primary">3</div>
+            <div className="text-3xl font-bold text-primary text-glow">3</div>
             <p className="text-xs text-muted-foreground mt-1">Under investigation</p>
           </CardContent>
         </Card>
 
-        <Card className="border-border bg-card/80">
+        <Card className="border-border bg-card/80 card-glow">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm text-muted-foreground">Security Score</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-foreground">94%</div>
+            <div className="text-3xl font-bold text-foreground text-glow">94%</div>
             <p className="text-xs text-success mt-1">Excellent</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Threat Intelligence */}
-      <Card className="border-2 border-primary/30 bg-card/80">
+      <Card className="border-2 border-primary/30 bg-card/80 card-glow">
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg flex items-center gap-2">
-              <Eye className="h-5 w-5 text-primary" />
+              <Eye className="h-5 w-5 text-primary icon-glow" />
               AI Threat Intelligence Feed
             </CardTitle>
             <Badge className="bg-primary/20 text-primary border-primary/30">REAL-TIME</Badge>
@@ -122,7 +122,7 @@ const SecurityLogsTab = () => {
 
       {/* AI Detection Patterns */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="border-border bg-card/80">
+        <Card className="border-border bg-card/80 card-glow">
           <CardHeader>
             <CardTitle className="text-lg">AI Detection Patterns</CardTitle>
           </CardHeader>
@@ -163,7 +163,7 @@ const SecurityLogsTab = () => {
           </CardContent>
         </Card>
 
-        <Card className="border-2 border-teal/30 bg-card/80">
+        <Card className="border-2 border-teal/30 bg-card/80 card-glow">
           <CardHeader>
             <CardTitle className="text-lg">Recent Security Actions</CardTitle>
           </CardHeader>
@@ -211,13 +211,13 @@ const SecurityLogsTab = () => {
       </div>
 
       {/* Export & Actions */}
-      <Card className="border-border bg-card/80">
+      <Card className="border-border bg-card/80 card-glow">
         <CardContent className="py-4">
           <div className="flex items-center justify-between">
             <div className="text-sm text-muted-foreground">
               <span className="text-teal font-semibold">AI Security Status:</span> All threat detection systems operational • 0 critical alerts • Last scan: 2 minutes ago
             </div>
-            <Button size="sm" variant="outline" className="border-primary">
+            <Button size="sm" variant="outline" className="border-primary glow-on-hover">
               <Download className="h-3 w-3 mr-2" />
               Export Security Report
             </Button>

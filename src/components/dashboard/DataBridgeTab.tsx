@@ -185,33 +185,46 @@ const DataBridgeTab = () => {
   };
 
   return (
-    <div className="space-y-6 bg-gray-900 min-h-screen p-6">
+    <div className="space-y-6 min-h-screen p-6">
       {/* Header */}
           <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-white">Tab 9 - Sponsor Data Bridge</h1>
+          <h1 className="text-3xl font-bold text-white neon-text">Tab 9 - Sponsor Data Bridge</h1>
           <div className="flex items-center gap-4 mt-2">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-              <span className="text-sm text-gray-400">Bridge Online ✓ Live Sync with SYSTEM N & CRM Cloud</span>
+              <div className="w-2 h-2 bg-green-400 rounded-full icon-glow"></div>
+              <span className="text-sm text-gray-400 text-glow">Bridge Online ✓ Live Sync with SYSTEM N & CRM Cloud</span>
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center font-bold text-white text-xl">
-            K
-                </div>
-          <span className="text-xl font-bold text-white">CARDIVERSE</span>
-              </div>
+        <div className="flex items-center gap-3">
+          <div 
+            className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center"
+            style={{
+              boxShadow: '0 0 8px rgba(59, 130, 246, 0.6), 0 0 16px rgba(139, 92, 246, 0.5), 0 0 24px rgba(59, 130, 246, 0.3)'
+            }}
+          >
+            <span className="text-white font-bold text-base">K</span>
+          </div>
+          <span 
+            className="font-bold text-base sm:text-lg neon-text"
+            style={{
+              color: 'hsl(195, 100%, 50%)',
+              textShadow: '0 0 3px hsl(195, 100%, 60%), 0 0 6px hsl(195, 100%, 60%)'
+            }}
+          >
+            KARDIVERSE
+          </span>
+        </div>
             </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column - System Status */}
         <div className="space-y-6">
           {/* System Status Table */}
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="bg-card border-border card-glow border border-cyan-400/20">
             <CardHeader>
-              <CardTitle className="text-white">System Status</CardTitle>
+              <CardTitle className="text-white neon-text">System Status</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="overflow-x-auto">
@@ -225,12 +238,12 @@ const DataBridgeTab = () => {
                   </TableHeader>
                   <TableBody>
                     {systemStatus.map((system, index) => (
-                      <TableRow key={index} className="border-gray-700 hover:bg-gray-700/50">
-                        <TableCell className="text-white font-medium">{system.system}</TableCell>
+                      <TableRow key={index} className="border-gray-700 hover:bg-gray-700/50 glow-on-hover">
+                        <TableCell className="text-white font-medium text-glow">{system.system}</TableCell>
                         <TableCell>
                           <div className="flex items-center gap-2">
                             {getStatusIcon(system.statusType)}
-                            <span className={`font-medium ${getStatusColor(system.statusType)}`}>
+                            <span className={`font-medium text-glow ${getStatusColor(system.statusType)}`}>
                               {system.status}
                             </span>
                           </div>
@@ -245,25 +258,25 @@ const DataBridgeTab = () => {
           </Card>
 
           {/* Legend */}
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="bg-card border-border card-glow border border-purple-400/20">
             <CardContent className="p-4">
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-teal-400 rounded-full"></div>
-                  <span className="text-sm text-white">Active</span>
+                  <div className="w-3 h-3 bg-teal-400 rounded-full icon-glow"></div>
+                  <span className="text-sm text-white text-glow">Active</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                  <span className="text-sm text-white">Alert</span>
+                  <div className="w-3 h-3 bg-yellow-400 rounded-full icon-glow"></div>
+                  <span className="text-sm text-white text-glow">Alert</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                  <span className="text-sm text-white">Alert</span>
+                  <div className="w-3 h-3 bg-red-400 rounded-full icon-glow"></div>
+                  <span className="text-sm text-white text-glow">Alert</span>
                 </div>
                 <div className="space-y-1 mt-4">
-                  <span className="text-sm text-slate-300">Pending</span>
-                  <span className="text-sm text-slate-300">Blockchain Linked</span>
-                  <span className="text-sm text-slate-300">Export All → Audit</span>
+                  <span className="text-sm text-slate-300 text-glow">Pending</span>
+                  <span className="text-sm text-slate-300 text-glow">Blockchain Linked</span>
+                  <span className="text-sm text-slate-300 text-glow">Export All → Audit</span>
             </div>
           </div>
         </CardContent>
@@ -273,11 +286,11 @@ const DataBridgeTab = () => {
         {/* Center Column - Data Bridge Diagram */}
         <div className="space-y-6">
           {/* Data Bridge Progress */}
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="bg-card border-border card-glow border border-blue-400/20">
             <CardContent className="p-6">
               <div className="flex flex-col items-center">
                 <div className="relative w-32 h-32 mb-4">
-                  <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                  <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100" style={{ filter: 'drop-shadow(0 0 8px rgba(0, 255, 255, 0.5))' }}>
                     {/* Background circle */}
                     <circle
                       cx="50"
@@ -302,18 +315,18 @@ const DataBridgeTab = () => {
                     />
                   </svg>
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-2xl font-bold text-white">{bridgeProgress}%</span>
+                    <span className="text-2xl font-bold text-white neon-text">{bridgeProgress}%</span>
               </div>
             </div>
-                <span className="text-sm text-cyan-400 uppercase tracking-wide">Data Bridge</span>
+                <span className="text-sm text-cyan-400 uppercase tracking-wide text-glow">Data Bridge</span>
               </div>
           </CardContent>
         </Card>
 
           {/* System Nodes Diagram */}
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="bg-card border-border card-glow border border-green-400/20">
           <CardHeader>
-              <CardTitle className="text-white">System Nodes</CardTitle>
+              <CardTitle className="text-white neon-text">System Nodes</CardTitle>
           </CardHeader>
             <CardContent>
               <div className="h-80 relative">
@@ -345,16 +358,16 @@ const DataBridgeTab = () => {
         </Card>
 
           {/* Performance Metrics */}
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="bg-card border-border card-glow border border-orange-400/20">
             <CardContent className="p-4">
               <div className="space-y-2">
               <div className="flex justify-between">
-                  <span className="text-sm text-slate-300">Latency</span>
-                  <span className="text-sm text-white font-medium">{latency} ms</span>
+                  <span className="text-sm text-slate-300 text-glow">Latency</span>
+                  <span className="text-sm text-white font-medium text-glow">{latency} ms</span>
               </div>
               <div className="flex justify-between">
-                  <span className="text-sm text-slate-300">Packet Loss</span>
-                  <span className="text-sm text-white font-medium">{packetLoss}%</span>
+                  <span className="text-sm text-slate-300 text-glow">Packet Loss</span>
+                  <span className="text-sm text-white font-medium text-glow">{packetLoss}%</span>
                 </div>
               </div>
           </CardContent>
@@ -364,76 +377,76 @@ const DataBridgeTab = () => {
         {/* Right Column - Accuracy & Actions */}
         <div className="space-y-6">
           {/* Accuracy Box */}
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="bg-card border-border card-glow border border-red-400/20">
           <CardHeader>
-              <CardTitle className="text-white">Accuracy & Actions</CardTitle>
+              <CardTitle className="text-white neon-text">Accuracy & Actions</CardTitle>
           </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="text-sm text-gray-300">0x8fa3...78bd</div>
-                <div className="text-sm text-gray-300">Validated on Ledger #942</div>
-                <div className="text-sm text-green-400">Checksum OK</div>
+                <div className="text-sm text-gray-300 text-glow">0x8fa3...78bd</div>
+                <div className="text-sm text-gray-300 text-glow">Validated on Ledger #942</div>
+                <div className="text-sm text-green-400 text-glow">Checksum OK</div>
               </div>
           </CardContent>
         </Card>
 
           {/* AI Forecast Box */}
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="bg-card border-border card-glow border border-yellow-400/20">
           <CardHeader>
-              <CardTitle className="text-white">AI Forecast</CardTitle>
+              <CardTitle className="text-white neon-text">AI Forecast</CardTitle>
           </CardHeader>
             <CardContent>
               <div className="space-y-3">
-                <div className="text-sm text-gray-300">Next Update in {aiForecast.nextUpdate} min</div>
-                <div className="text-sm text-green-400">Confidence {aiForecast.confidence}%</div>
+                <div className="text-sm text-gray-300 text-glow">Next Update in {aiForecast.nextUpdate} min</div>
+                <div className="text-sm text-green-400 text-glow">Confidence {aiForecast.confidence}%</div>
             </div>
           </CardContent>
         </Card>
 
           {/* Action Buttons */}
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="bg-card border-border card-glow border border-cyan-400/20">
             <CardContent className="p-4">
               <div className="grid grid-cols-3 gap-3">
                 <Button
                   onClick={handleForceSync}
-                  className="aspect-square bg-cyan-600 hover:bg-cyan-700 text-white"
+                  className="aspect-square bg-cyan-600 hover:bg-cyan-700 text-white button-glow glow-on-hover"
                 >
-                  <RefreshCw className="h-4 w-4" />
+                  <RefreshCw className="h-4 w-4 icon-glow" />
                 </Button>
                 <Button
                   onClick={handleOpenLedgerEmpty}
-                  className="aspect-square bg-green-600 hover:bg-green-700 text-white"
+                  className="aspect-square bg-green-600 hover:bg-green-700 text-white button-glow glow-on-hover"
                 >
-                  <FileText className="h-4 w-4" />
+                  <FileText className="h-4 w-4 icon-glow" />
                 </Button>
                 <Button
                   onClick={handleEmptyAction}
-                  className="aspect-square bg-gray-600 hover:bg-gray-700 text-white"
+                  className="aspect-square bg-gray-600 hover:bg-gray-700 text-white button-glow glow-on-hover"
                 >
-                  <Circle className="h-4 w-4" />
+                  <Circle className="h-4 w-4 icon-glow" />
                 </Button>
               </div>
               <div className="mt-3 text-center">
-                <div className="text-xs text-gray-400">Force Sync</div>
-                <div className="text-xs text-gray-400">Open Ledger</div>
+                <div className="text-xs text-gray-400 text-glow">Force Sync</div>
+                <div className="text-xs text-gray-400 text-glow">Open Ledger</div>
                 <div className="text-xs text-gray-400"></div>
             </div>
           </CardContent>
         </Card>
 
           {/* Alert Message */}
-          <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-3">
-            <div className="text-red-400 text-sm">SYSTEM E Offline - Auto retry in 2 min</div>
+          <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-3 card-glow glow-on-hover">
+            <div className="text-red-400 text-sm text-glow">SYSTEM E Offline - Auto retry in 2 min</div>
           </div>
         </div>
       </div>
 
       {/* Force Sync Dialog */}
       <Dialog open={showSyncDialog} onOpenChange={setShowSyncDialog}>
-        <DialogContent className="bg-gray-800 border-gray-700 text-white max-w-2xl">
+        <DialogContent className="bg-card border-border text-white max-w-2xl border border-cyan-400/30 card-glow">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-white flex items-center gap-2">
-              <RefreshCw className={`h-6 w-6 text-cyan-400 ${syncStatus === 'syncing' ? 'animate-spin' : ''}`} />
+            <DialogTitle className="text-2xl font-bold text-white neon-text flex items-center gap-2">
+              <RefreshCw className={`h-6 w-6 text-cyan-400 icon-glow ${syncStatus === 'syncing' ? 'animate-spin' : ''}`} />
               Force Data Synchronization
             </DialogTitle>
           </DialogHeader>
@@ -442,31 +455,31 @@ const DataBridgeTab = () => {
             {/* Sync Progress */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-300">Sync Progress</span>
-                <span className="text-sm font-bold text-cyan-400">{syncProgress}%</span>
+                <span className="text-sm text-gray-300 text-glow">Sync Progress</span>
+                <span className="text-sm font-bold text-cyan-400 neon-text">{syncProgress}%</span>
               </div>
               <div className="w-full bg-gray-700 rounded-full h-3">
                 <div 
-                  className="bg-gradient-to-r from-cyan-500 to-blue-500 h-3 rounded-full transition-all duration-300"
+                  className="bg-gradient-to-r from-cyan-500 to-blue-500 h-3 rounded-full transition-all duration-300 card-glow"
                   style={{ width: `${syncProgress}%` }}
                 ></div>
               </div>
             </div>
 
             {/* Sync Status */}
-            <Card className="bg-gray-900 border-gray-700">
+            <Card className="bg-card border-border card-glow border border-green-400/20">
               <CardHeader>
-                <CardTitle className="text-lg text-white">System Status</CardTitle>
+                <CardTitle className="text-lg text-white neon-text">System Status</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
                   {systemStatus.map((system, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 bg-gray-800 rounded">
+                    <div key={index} className="flex items-center justify-between p-2 bg-muted/50 rounded glow-on-hover">
                       <div className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full ${
+                        <div className={`w-2 h-2 rounded-full icon-glow ${
                           syncProgress > (index + 1) * 20 ? 'bg-green-400' : 'bg-yellow-400 animate-pulse'
                         }`}></div>
-                        <span className="text-sm text-white">{system.system}</span>
+                        <span className="text-sm text-white text-glow">{system.system}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         {syncProgress > (index + 1) * 20 ? (
@@ -513,7 +526,7 @@ const DataBridgeTab = () => {
                     setSyncStatus('idle');
                     setSyncProgress(0);
                   }}
-                  className="bg-cyan-600 hover:bg-cyan-700 text-white"
+                  className="bg-cyan-600 hover:bg-cyan-700 text-white button-glow glow-on-hover"
                 >
                   Close
                 </Button>
@@ -525,7 +538,7 @@ const DataBridgeTab = () => {
                     setSyncProgress(0);
                   }}
                   variant="outline"
-                  className="border-gray-600 text-gray-300 hover:bg-gray-700"
+                  className="border-gray-600 text-gray-300 hover:bg-gray-700 glow-on-hover"
                 >
                   Cancel
                 </Button>
@@ -537,10 +550,10 @@ const DataBridgeTab = () => {
 
       {/* Ledger Viewer Dialog */}
       <Dialog open={showLedgerDialog} onOpenChange={setShowLedgerDialog}>
-        <DialogContent className="bg-gray-800 border-gray-700 text-white max-w-4xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="bg-card border-border text-white max-w-4xl max-h-[80vh] overflow-y-auto border border-green-400/30 card-glow">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-white flex items-center gap-2">
-              <FileText className="h-6 w-6 text-green-400" />
+            <DialogTitle className="text-2xl font-bold text-white neon-text flex items-center gap-2">
+              <FileText className="h-6 w-6 text-green-400 icon-glow" />
               Blockchain Ledger Viewer
             </DialogTitle>
           </DialogHeader>
@@ -548,30 +561,30 @@ const DataBridgeTab = () => {
           <div className="space-y-6 mt-4">
             {/* Ledger Summary */}
             <div className="grid grid-cols-3 gap-4">
-              <Card className="bg-gray-900 border-gray-700">
+              <Card className="bg-card border-border card-glow border border-cyan-400/20">
                 <CardContent className="p-4">
-                  <div className="text-xs text-gray-400">Total Blocks</div>
-                  <div className="text-2xl font-bold text-cyan-400">942</div>
+                  <div className="text-xs text-gray-400 text-glow">Total Blocks</div>
+                  <div className="text-2xl font-bold text-cyan-400 neon-text">942</div>
                 </CardContent>
               </Card>
-              <Card className="bg-gray-900 border-gray-700">
+              <Card className="bg-card border-border card-glow border border-green-400/20">
                 <CardContent className="p-4">
-                  <div className="text-xs text-gray-400">Validated</div>
-                  <div className="text-2xl font-bold text-green-400">100%</div>
+                  <div className="text-xs text-gray-400 text-glow">Validated</div>
+                  <div className="text-2xl font-bold text-green-400 neon-text">100%</div>
                 </CardContent>
               </Card>
-              <Card className="bg-gray-900 border-gray-700">
+              <Card className="bg-card border-border card-glow border border-blue-400/20">
                 <CardContent className="p-4">
-                  <div className="text-xs text-gray-400">Latest Block</div>
-                  <div className="text-2xl font-bold text-white">#942</div>
+                  <div className="text-xs text-gray-400 text-glow">Latest Block</div>
+                  <div className="text-2xl font-bold text-white neon-text">#942</div>
                 </CardContent>
               </Card>
             </div>
 
             {/* Ledger Table */}
-            <Card className="bg-gray-900 border-gray-700">
+            <Card className="bg-card border-border card-glow border border-purple-400/20">
               <CardHeader>
-                <CardTitle className="text-lg text-white">Recent Blockchain Entries</CardTitle>
+                <CardTitle className="text-lg text-white neon-text">Recent Blockchain Entries</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="overflow-x-auto">
@@ -587,7 +600,7 @@ const DataBridgeTab = () => {
                     </TableHeader>
                     <TableBody>
                       {ledgerData.map((entry, index) => (
-                        <TableRow key={index} className="border-gray-700 hover:bg-gray-800">
+                        <TableRow key={index} className="border-gray-700 hover:bg-muted/50">
                           <TableCell className="text-cyan-400 font-mono">{entry.block}</TableCell>
                           <TableCell className="text-gray-300 font-mono text-sm">{entry.hash}</TableCell>
                           <TableCell className="text-gray-400 text-sm">{entry.timestamp}</TableCell>
@@ -607,7 +620,7 @@ const DataBridgeTab = () => {
             </Card>
 
             {/* Ledger Details */}
-            <Card className="bg-gray-900 border-gray-700">
+            <Card className="bg-card border-border card-glow">
               <CardHeader>
                 <CardTitle className="text-lg text-white">Current Ledger: #942</CardTitle>
               </CardHeader>
